@@ -15,3 +15,6 @@ import login
 import register
 import reset
 import dashboard
+import viewcomplaint
+import complaintdetails
+import assigning
