@@ -429,7 +429,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text mdi mdi-calendar" id="basic-addon1"></span>
                           </div>
-                          <input type="text" class="form-control" data-mask="00/00/0000">
+                          <input type="text" class="form-control" data-mask="00/00/0000" required>
                         </div>
                       </div>
                     </div>
@@ -441,7 +441,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text mdi mdi-phone" id="basic-addon1"></span>
                           </div>
-                          <input type="text" class="form-control" data-mask="(999) 999-9999">
+                          <input type="text" class="form-control" data-mask="(999) 999-9999" required>
                         </div>  
                       </div>
                     </div>
@@ -453,7 +453,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text mdi mdi-currency-usd" id="basic-addon1"></span>
                           </div>
-                          <input type="text" class="form-control" data-mask="99-9999999">
+                          <input type="text" class="form-control" data-mask="99-9999999" required>
                         </div>
                       </div>
                     </div>
@@ -465,7 +465,12 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text mdi mdi-server-security" id="basic-addon1"></span>
                           </div>
-                          <input type="text" class="form-control" data-mask="999-99-9999">
+                          <select class = "form-control" name="department" id="a_department" required>
+                            <option value="" id = "1" disabled selected hidden>Department</option>
+                            <option value="OAP" id = "2">OAP</option>
+                            <option value="OCS" id = "3">OCS</option>
+                            <option value="RO" id = "4">RO</option>
+                          </select>
                         </div>  
                       </div>
                     </div>
@@ -477,7 +482,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text mdi mdi-settings" id="basic-addon1"></span>
                           </div>
-                          <input type="text" class="form-control" data-mask="~9.99 ~9.99 999">
+                          <input type="text" class="form-control" data-mask="~9.99 ~9.99 999" required>
                         </div>
                       </div>
                     </div>
@@ -489,7 +494,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text mdi mdi-credit-card" id="basic-addon1"></span>
                           </div>
-                          <input type="text" class="form-control" data-mask="9999 9999 9999 9999">
+                          <input type="text" class="form-control" data-mask="9999 9999 9999 9999" required>
                         </div>
                       </div>
                     </div>
