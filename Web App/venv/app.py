@@ -14,7 +14,7 @@ def home():
 import login
 import register
 import reset
+import student_complaint
+import admin_complaint
+import edit_account
 import dashboard
-import viewcomplaint
-import complaintdetails
-import assigning

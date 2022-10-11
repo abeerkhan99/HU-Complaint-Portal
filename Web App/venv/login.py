@@ -9,6 +9,10 @@ def login():
 @app.route('/submit', methods = ['GET', 'POST'])
 def submit():
     if request.method == 'POST':
-        return render_template('homepage.html')
+        return redirect('/student-dashboard')
     else:
         return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    return redirect('/')
