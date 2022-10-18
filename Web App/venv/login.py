@@ -36,7 +36,7 @@ def submit():
                 if student_p[0][0] == str(upassword):
                     print("SUCCESS")
                     
-                    cur.execute('select StudentFirstName, StudentLastName, StudentID, ProgramName from Student, Program where StudentEmail = %s and ProgramID = Student_Program', (uemail,))
+                    cur.execute('select StudentFirstName, StudentLastName, StudentID, ProgramName, Batch from Student, Program where StudentEmail = %s and ProgramID = Student_Program', (uemail,))
 
                     student_info = cur.fetchall()
                     print(student_info)
@@ -46,8 +46,11 @@ def submit():
                     session['student_fname'] = student_info[0][0]
                     session['student_lname'] = student_info[0][1]
                     session['student_program'] = student_info[0][3]
+                    session['student_email'] = uemail
+                    session['student_batch'] = student_info[0][4]
+                    session['user_type'] = "Student"
 
-                    return redirect('/student-dashboard')
+                    return redirect('/dashboard')
                 else:
                     print('FAIL')
                     return render_template('login.html', message = "Incorrect password")
@@ -83,8 +86,10 @@ def submit():
                     session['admin_fname'] = admin_info[0][0]
                     session['admin_lname'] = admin_info[0][1]
                     session['admin_department'] = admin_info[0][3]
+                    session['admin_email'] = uemail
+                    session['user_type'] = "Admin"
                     
-                    return redirect('/admin-dashboard')
+                    return redirect('/dashboard')
                 else:
                     print('FAIL')
                     return render_template('login.html', message = "Incorrect password")
@@ -97,4 +102,23 @@ def submit():
 
 @app.route('/logout')
 def logout():
+
+    # clear session
+    if session['user_type'] == "Admin":
+        session.pop('admin_id')
+        session.pop('admin_fname')
+        session.pop('admin_lname')
+        session.pop('admin_department')
+        session.pop('admin_email')
+
+    elif session['user_type'] == "Student":
+        session.pop('student_id')
+        session.pop('student_fname') 
+        session.pop('student_lname')
+        session.pop('student_program')
+        session.pop('student_email')
+        session.pop('student_batch')
+    
+    session.pop('user_type')
+
     return redirect('/')

@@ -23,7 +23,17 @@ cur = conn.cursor()
 # routing
 @app.route('/')
 def home():
-    return render_template('welcome.html')
+
+    cur.execute('select count(ComplaintID) from Complaint')
+    total = cur.fetchall()
+
+    cur.execute('select count(ComplaintID) from Complaint, Status where Complaint_Status = StatusID and StatusName = %s', ('Pending',))
+    pending = cur.fetchall()
+
+    cur.execute('select count(ComplaintID) from Complaint, Status where Complaint_Status = StatusID and StatusName = %s', ('Resolved',))
+    resolved = cur.fetchall()
+    
+    return render_template('welcome.html', total = total[0][0], pending = pending[0][0], resolved = resolved[0][0])
 
 import login
 import register

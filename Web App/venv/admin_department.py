@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, session, redirect
 from app import app
+from app import conn, cur
 
 @app.route('/view-department')
 def view_department():

@@ -32,6 +32,8 @@ def register_submit():
         user_password = request.form['password']
         user_p_d = request.form.get('program')
         
+        print("Email: ", user_email)
+        print("Password: ", user_password)
 
         if user_type == "Student":
             user_batch = request.form['s_batch']
@@ -56,7 +58,7 @@ def register_submit():
                 program_id = cur.fetchall()
 
                 cur.execute("insert into Student(StudentID, StudentFirstName, StudentLastName, StudentEmail, StudentPassword, Student_Program, Batch) VALUES(%s,%s, %s, %s, %s, %s, %s)", 
-                            (user_id, first_name, last_name, user_password, user_email, program_id[0][0], user_batch))
+                            (user_id, first_name, last_name, user_email, user_password, program_id[0][0], str(user_batch)))
 
                 conn.commit()
                 return render_template('login.html', message = "Registration successful! Please login.")
@@ -81,7 +83,10 @@ def register_submit():
                 # add admin in database
 
                 # check if admin information exists in Employee database
-                cur.execute('select EmployeeID, EmployeeFirstName, EmployeeLastName from Employee where EmployeeID = %s and EmployeeFirstName = %s and EmployeeLastName = %s', (user_id, first_name, last_name))
+                cur.execute('select DepartmentID from Department where DepartmentName = %s', (user_p_d,))
+                department_id = cur.fetchall()
+                
+                cur.execute('select EmployeeID, Employee_Department from Employee where EmployeeID = %s and Employee_Department = %s', (user_id, department_id[0][0]))
                 employee_admin_object = cur.fetchall()
 
                 if len(employee_admin_object) == 0:
@@ -92,7 +97,7 @@ def register_submit():
                     department_id = cur.fetchall()
 
                     cur.execute("insert into Admin(AdminID, AdminFirstName, AdminLastName, AdminEmail, AdminPassword, Admin_Department) VALUES(%s,%s, %s, %s, %s, %s)", 
-                                (user_id, first_name, last_name, user_password, user_email, department_id[0][0]))
+                                (user_id, first_name, last_name, user_email, user_password, department_id[0][0]))
 
                     conn.commit()
                     return render_template('login.html', message = "Registration successful! Please login.")
