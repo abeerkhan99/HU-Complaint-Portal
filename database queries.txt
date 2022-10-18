@@ -1,0 +1,108 @@
+create table Employee
+(
+	EmployeeID varchar(7) unique primary key not null,
+	Employee_Department int,
+	constraint FK_Employee_Department foreign key(Employee_Department) references Department(DepartmentID)
+);
+
+create table Status
+(
+	StatusID serial unique primary key not null,
+	StatusName varchar(50000) unique not null
+);
+
+insert into Status(StatusName)
+values ('Unresolved');
+
+insert into Status(StatusName)
+values ('Pending');
+
+insert into Status(StatusName)
+values ('Resolved');
+
+create table Department
+(
+	DepartmentID serial unique primary key not null,
+	DepartmentName varchar(50000) unique not null
+);
+
+insert into Department(DepartmentName)
+values ('RO');
+
+insert into Department(DepartmentName)
+values ('OCS');
+
+insert into Department(DepartmentName)
+values ('OAP');
+
+create table Program
+(
+	ProgramID serial unique primary key not null,
+	ProgramName varchar(50000) unique not null
+);
+
+insert into Program(ProgramName)
+values ('CS');
+
+insert into Program(ProgramName)
+values ('EE');
+
+insert into Program(ProgramName)
+values ('SDP');
+
+insert into Program(ProgramName)
+values ('CND');
+
+create table Admin
+(
+	AdminID varchar(7) unique primary key not null,
+	AdminFirstName varchar(5000) not null,
+	AdminLastName varchar(5000) not null,
+	AdminEmail varchar(5000) not null,
+	AdminPassword varchar(5000) not null,
+	Admin_Deparment int,
+	constraint FK_Admin_Department foreign key(Admin_Department) references Department(DepartmentID)
+);
+
+insert into Admin(AdminID, AdminFirstName, AdminLastName, AdminEmail, AdminPassword, Admin_Department)
+values ('aa05423', 'Ali', 'Adnan', 'aa05423@habib.edu.pk', '12345', 1);
+
+create table Student
+(
+	StudentID varchar(7) unique primary key not null,
+	StudentFirstName varchar(5000) not null,
+	StudentLastName varchar(5000) not null,
+	StudentEmail varchar(5000) not null,
+	StudentPassword varchar(5000) not null,
+	Student_Program int,
+	constraint FK_Student_Program foreign key(Student_Program) references Program(ProgramID)
+);
+
+insert into Student(StudentID, StudentFirstName, StudentLastName, StudentEmail, StudentPassword, Student_Program)
+values ('ak05419', 'Abeer', 'Khan', 'ak05419@st.habib.edu.pk', '12345', 1);
+
+create table Complaint
+(
+	ComplaintID serial unique primary key not null,
+	ComplaintTitle varchar(50000) not null,
+	ComplaintContent varchar(1000000) not null,
+	ComplaintDate date not null,
+	ResolveDate date,
+	Complaint_DepartmentID int,
+	Complaint_StudentID varchar(7),
+	Complaint_AdminID varchar(7),
+	Complaint_Status int,
+	constraint FK_Complaint_Department foreign key(Complaint_DepartmentID) references Department(DepartmentID),
+	constraint FK_Complaint_Student foreign key(Complaint_StudentID) references Student(StudentID),
+	constraint FK_Complaint_Admin foreign key(Complaint_AdminID) references Admin(AdminID),
+	constraint FK_Complaint_Status foreign key(Complaint_Status) references Status(StatusID)
+);
+
+insert into Complaint(ComplaintTitle, ComplaintContent, ComplaintDate, Complaint_DepartmentID, Complaint_StudentID, Complaint_Status)
+values('Complaint 2', 'Dashboard is not working', CURRENT_DATE, 1, 'ak05419', 2);
+
+insert into Complaint(ComplaintTitle, ComplaintContent, ComplaintDate, Complaint_DepartmentID, Complaint_StudentID, Complaint_Status)
+values('Complaint 3', 'Profile is not working', CURRENT_DATE, 1, 'ak05419', 1);
+
+insert into Complaint(ComplaintTitle, ComplaintContent, ComplaintDate, ResolveDate, Complaint_DepartmentID, Complaint_StudentID, Complaint_AdminID, Complaint_Status)
+values('Complaint 4', 'DB is not working', '2022-03-17', CURRENT_DATE, 1, 'ak05419', 'aa05423', 3);
