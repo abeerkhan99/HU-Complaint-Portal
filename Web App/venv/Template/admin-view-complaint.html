@@ -13,7 +13,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Make a Complaint</title>
+  <title>HU Complaint Portal - View a Complaint</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
@@ -69,26 +69,18 @@
             <div class="sidebar-left" data-simplebar style="height: 100%;">
               <!-- sidebar menu -->
               <ul class="nav sidebar-inner" id="sidebar-menu">
-                
                 <li class = "section-title">Home</li>
                 <li>
                   <a class="sidenav-item-link" href="{{url_for('dashboard')}}">
                     <i class="mdi mdi-briefcase-account-outline"></i>
-                    <span class="nav-text">Student Dashboard</span>
+                    <span class="nav-text">Admin Dashboard</span>
                   </a>
                 </li>
                 <li class = "section-title">Pages</li>
                 <li>
-                  <a class="sidenav-item-link" href="{{url_for('make_complaint')}}">
-                    <i class="mdi mdi-square-edit-outline"></i>
-                    <span class="nav-text">File your Complaint</span>
-                  </a>
-                </li>
-            
-                <li>
                   <a class="sidenav-item-link" href="{{url_for('view_complaint')}}">
                     <i class="mdi mdi-square-edit-outline"></i>
-                    <span class="nav-text">View your Complaint</span>
+                    <span class="nav-text">View Complaints</span>
                   </a>
                 </li>
                 <li class = "section-title">Profile</li>
@@ -97,11 +89,12 @@
                     <i class="mdi mdi-account"></i>
                     <span class="nav-text">View my Profile</span>
                   </a>
-                </li>
-              
+                </li>    
+            
             </div>
 
-            <div class="sidebar-footer"></div>
+            <div class="sidebar-footer">
+            </div>
           </div>
         </aside>
 
@@ -123,12 +116,12 @@
               <div class="navbar-right ">
 
                 <ul class="nav navbar-nav">
-                  
+                
                   <!-- User Account -->
                   <li class="dropdown user-menu">
                     <button class="dropdown-toggle nav-link" data-toggle="dropdown">
                       <img src="../static/images/user/user-xs-01.jpg" class="user-image rounded-circle" alt="User Image" />
-                      <span class="d-none d-lg-inline-block">{{session['student_fname']}} {{session['student_lname']}}</span>
+                      <span class="d-none d-lg-inline-block">{{session['admin_fname']}} {{session['admin_lname']}}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <li>
@@ -160,79 +153,62 @@
         ——— CONTENT WRAPPER
         ===================================== -->
         <div class="content-wrapper">
-          <div class="content"><!-- For Components documentaion -->
-            <div class="card card-default">
-              <div class="px-6 py-4">
-                <p>Please enter the complaint you have for a department in the complaint form so that we may address it. <a
-                    class="font-weight-bold" href="https://igorescobar.github.io/jQuery-Mask-Plugin/docs.html" target="_blank">Thank you</a></p>
-              </div>
-            </div>
+            <div class="content"><!-- For Components documentaion -->
 
-            <!-- Masked Input -->
-            <div class="card card-default">
-              <div class="card-header">
-                <h2>File a Complaint</h2>
-              </div>
-  
-              <div class="card-body">
+            <!-- Card with Image Overlay -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h2>View Complaint</h2>
+                    </div>
                 
-                {% if message %}
-                  <label id = "error" style="color: green;"> {{ message | safe }} </label>
-                {% endif %}
-                
-                <form action="/make-complaint-submit" method="POST">
-                  <div class="row">
-                    <div class="col-xl-6">
-                      <div class="mb-5">
-                        <label class="text-dark font-weight-medium">Department</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text mdi mdi-server-security" id="basic-addon1"></span>
-                          </div>
-                          <select class = "form-control" name="department" id="a_department" required>
-                            <option value="" id = "1" disabled selected hidden>Department</option>
-                            {% for d in department %}
-                              <option value = "{{d[0]}}">{{d[0]}}</option>
-                            {% endfor %}
-                          </select>
-                        </div>  
-                      </div>
-                    </div>
+                    <div class="card-body">
 
-                    <div class="col-xl-6">
-                      <div class="mb-5">
-                        <label class="text-dark font-weight-medium">Complaint Title</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text mdi mdi-settings" id="basic-addon1"></span>
-                          </div>
-                          <input type="text" class="form-control" name = "c_title" required>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">Complaint Number</th>
+                                    <th scope="col">Complaint Lodged</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <th scope="row">1</th>
+                                    <td>19-04-2022</td>
+                                    <td>RO</td>
+                                    <td>Unresolved</td>
+                                    <td>
+                                        <a href = "{{url_for('complaint_detail')}}"><button type="button" class="btn btn-primary"><i class="far fa-eye" >Complaint </i></button></a>
+                                        <a href = "{{url_for('reassign_complaint')}}"><button type="button" class="btn btn-primary" ><i class="far fa-eye">Reassign</i></button></a>
+                                        <button type="button" class="btn btn-primary"><i class="far fa-eye">Resolve</i></button>
+
+                                      </td>
+                                
+                                    </tr>
+                                    <tr>
+                                    <th scope="row">2</th>
+                                    <td>21-07-2021</td>
+                                    <td>OCS</td>
+                                    <td>Unresolved</td>
+                                    <td>
+                                        <a href = "{{url_for('complaint_detail')}}"><button type="button" class="btn btn-primary" ><i class="far fa-eye"href = "{{url_for('complaint_detail')}}" >Complaint</i></button></a>
+                                        <a href = "{{url_for('reassign_complaint')}}"><button type="button" class="btn btn-primary" ><i class="far fa-eye">Reassign</i></button></a>
+                                        <button type="button" class="btn btn-primary" style="margin-left:8vw;" ><i class="far fa-eye">Resolve</i></button>
+                                    </td>
+
+                                    </tr>
+                                </tbody>
+                                </table>
+                            </div>
                         </div>
-                      </div>
+
                     </div>
-
-                    <div class="col-xl-6">
-                      <div class="mb-5">
-                        <label class="text-dark font-weight-medium">Complaint Description</label>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text mdi mdi-credit-card" id="basic-addon1"></span>
-                          </div>
-                          <input type="text" class="form-control" name = "c_content" required>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-12">
-                      <button type="submit" class="btn btn-primary btn-pill mb-4">Make a Complaint</button>
-                    <div>
-                  </div>
-                </form>
-
-              </div>
+                </div>
             </div>
-          </div>
-
           <!-- Footer -->
           <footer class="footer mt-auto">
             <div class="copyright bg-white">
@@ -246,8 +222,8 @@
                 document.getElementById("copy-year").innerHTML = year;
             </script>
           </footer>
+
         </div>
-      </div>
     </div>
   
 

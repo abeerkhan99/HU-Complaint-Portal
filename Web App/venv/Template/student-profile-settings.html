@@ -132,25 +132,25 @@
                             <li class="dropdown user-menu">
                                 <button class="dropdown-toggle nav-link" data-toggle="dropdown">
                                     <img src="../static/images/user/user-xs-01.jpg" class="user-image rounded-circle" alt="User Image" />
-                                    <span class="d-none d-lg-inline-block">John Doe</span>
+                                    <span class="d-none d-lg-inline-block">{{session['student_fname']}} {{session['student_lname']}}</span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <li>
-                                        <a class="dropdown-link-item" href="user-profile.html">
+                                        <a class="dropdown-link-item" href="{{url_for('view_profile')}}">
                                             <i class="mdi mdi-account-outline"></i>
                                             <span class="nav-text">My Profile</span>
                                         </a>
                                     </li>
 
                                     <li>
-                                        <a class="dropdown-link-item" href="user-account-settings.html">
+                                        <a class="dropdown-link-item" href="{{url_for('edit_profile')}}">
                                             <i class="mdi mdi-settings"></i>
                                             <span class="nav-text">Account Setting</span>
                                         </a>
                                     </li>
 
                                     <li class="dropdown-footer">
-                                        <a class="dropdown-link-item" href="sign-in.html"> <i class="mdi mdi-logout"></i> Log Out </a>
+                                        <a class="dropdown-link-item" href="{{url_for('logout')}}"> <i class="mdi mdi-logout"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>
@@ -175,8 +175,8 @@
 
                                 <div class="profile-avata">
                                     <img class="rounded-circle" src="../static/images/user/user-md-01.jpg" alt="Avata Image">
-                                    <a class="h5 d-block mt-3 mb-2" href="#">Albrecht Straub</a>
-                                    <a class="d-block text-color" href="#">albercht@example.com</a>
+                                    <a class="h5 d-block mt-3 mb-2" href="#">{{session['student_fname']}} {{session['student_lname']}}</a>
+                                    <a class="d-block text-color" href="#">{{session['student_email']}}</a>
                                 </div>
 
                             </div>
