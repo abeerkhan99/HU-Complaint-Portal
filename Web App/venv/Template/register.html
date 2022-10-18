@@ -65,7 +65,7 @@
                                     <div class="col-md-12">
 
                                         {% if message %}
-                                            <p style="color: red;"> {{ message | safe }} </p>
+                                            <label id = "error" style="color: red;"> {{ message | safe }} </label>
                                         {% endif %}
 
                                         <div class="d-flex justify-content-between mb-3">
@@ -93,10 +93,11 @@
 
                                     <div class="form-group col-md-12 mb-4" id = "student_id">
                                         <input type="text" class="form-control input-lg" id="s_id" name = "s_id" aria-describedby="idHelp" placeholder="StudentID" disabled required>
+                                        <span class="d-block mt-1">Format: ak05419</span>
                                     </div>
                     
                                     <div class="form-group col-md-12 mb-4" id = "batch">
-                                        <input type="text" class="form-control input-lg" id="s_batch" name = "s_batch" aria-describedby="batchHelp" placeholder="Batch" disabled>
+                                        <input type="number" class="form-control input-lg" id="s_batch" name = "s_batch" aria-describedby="batchHelp" placeholder="Batch" min ="2018" disabled>
                                     </div>
 
                                     <div class="form-group col-md-12 mb-4">
@@ -125,11 +126,9 @@
                                         </select>
                                     </div>
                     
-
                                     <div class="col-md-12">
 
                                         <button type="submit" id = "submit-btn" class="btn btn-primary btn-pill mb-4" disabled>Sign Up</button>
-                                        <label id = "error" class = "col-md-12"></label>
 
                                         <p>Already have an account?
                                             <a class="text-blue" href="{{url_for('login')}}">Sign in</a>
@@ -151,16 +150,13 @@
         {
             if (document.getElementById('studentCheck').checked)
             {
-
                 // check if batch input field is hidden or not
                 var element = document.getElementById("s_batch");
                 // if field is not hidden
                 if(typeof(element) == 'undefined' && element != null)
                 {
-                    element.setAttribute('required', '');
-                                
+                    element.setAttribute('required', '');               
                 }
-
                 // if batch input field is hidden
                 else
                 {
@@ -191,14 +187,11 @@
                     
                     var element = document.getElementById('a_department');
                     element.removeAttribute('required');
-
-                }
-                
+                }    
             }
 
             else if (document.getElementById('adminCheck').checked)
             {
-                
                 // hide batch input field
                 var element = document.getElementById("batch");
                 element.style.display = 'none';
@@ -224,7 +217,6 @@
                 if (hidden)
                 {
                     element.removeAttribute("hidden");
-
                 }
 
                 var element = document.getElementById('a_department');
@@ -244,7 +236,6 @@
         function to_submit()
         {
             // email address and user id must match a specific format before it can be sent to the database
-
             var user_id = document.getElementById('s_id');
             var user_email = document.getElementById('email');
 
@@ -253,11 +244,11 @@
                 if ((user_id.value.length == 7) && (/^([a-z]{2})(\d{5})$/.test(user_id.value)) && (/^([a-z]{2})\d{5}@st.habib.edu.pk$/.test(user_email.value)))
                 {
                     document.getElementById("error").innerHTML = "";
-
                     return true;
                 }
                 else
                 {
+                    document.getElementById('error').innerHTML = "";
                     document.getElementById("error").innerHTML = "Please check the format of your ID and Email Address.";
                     return false;
                 }
@@ -271,11 +262,11 @@
                 }
                 else
                 {
+                    document.getElementById('error').innerHTML = "";
                     document.getElementById("error").innerHTML = "Please check the format of your ID and Email Address.";
                     return false;
                 }
             }
-
         }
 
     </script>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>View Profile</title>
+
+  <!-- GOOGLE FONTS -->
+  <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
+  <link href="../static/plugins/material/css/materialdesignicons.min.css" rel="stylesheet" />
+  <link href="../static/plugins/simplebar/simplebar.css" rel="stylesheet" />
+
+  <!-- PLUGINS CSS STYLE -->
+  <link href="../static/plugins/nprogress/nprogress.css" rel="stylesheet" />
+  
+  <link href="../static/plugins/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+  <!-- MONO CSS -->
+  <link id="main-css-href" rel="stylesheet" href="../static/css/style.css" />
+
+  <!-- FAVICON -->
+  <link href="../static/assets/img/favicon-16x16.png" rel="shortcut icon">
+
+  <!--
+    HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
+  -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <script src="../static/plugins/nprogress/nprogress.js"></script>
+</head>
+
+
+<body class="navbar-fixed sidebar-fixed" id="body">
+    <script>
+      NProgress.configure({ showSpinner: false });
+      NProgress.start();
+    </script>
+
+    <!-- ====================================
+    ——— WRAPPER
+    ===================================== -->
+    <div class="wrapper">
+    
+        <!-- ====================================
+          ——— LEFT SIDEBAR WITH OUT FOOTER
+        ===================================== -->
+        <aside class="left-sidebar sidebar-dark" id="left-sidebar">
+            
+            <div id="sidebar" class="sidebar sidebar-with-footer">
+                <!-- Aplication Brand -->
+                <div class="app-brand">
+                    <a>
+                        <img src="../static/images/habib.png" alt="Mono">
+                        <span class="brand-name">Habib University</span>
+                    </a>
+                </div>
+
+                <!-- begin sidebar scrollbar -->
+                <div class="sidebar-left" data-simplebar style="height: 100%;">
+
+                    <!-- sidebar menu -->
+                    <ul class="nav sidebar-inner" id="sidebar-menu">
+                      <li class = "section-title">Home</li>
+                      <li>
+                        <a class="sidenav-item-link" href="{{url_for('dashboard')}}">
+                          <i class="mdi mdi-briefcase-account-outline"></i>
+                          <span class="nav-text">Admin Dashboard</span>
+                        </a>
+                      </li>
+                      <li class = "section-title">Pages</li>
+                      <li>
+                        <a class="sidenav-item-link" href="{{url_for('view_complaint')}}">
+                          <i class="mdi mdi-square-edit-outline"></i>
+                          <span class="nav-text">View Complaints</span>
+                        </a>
+                      </li>
+                      <li class = "section-title">Profile</li>
+                      <li>
+                        <a class="sidenav-item-link" href="{{url_for('view_profile')}}">
+                          <i class="mdi mdi-account"></i>
+                          <span class="nav-text">View my Profile</span>
+                        </a>
+                      </li>          
+
+                </div>
+            </div>
+        </aside>
+
+      <!-- ====================================
+      ——— PAGE WRAPPER
+      ===================================== -->
+      <div class="page-wrapper">
+        
+          <!-- Header -->
+          <header class="main-header" id="header">
+            <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+              <!-- Sidebar toggle button -->
+              <button id="sidebar-toggler" class="sidebar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+              </button>
+
+              <span class="page-title">user profile</span>
+
+              <div class="navbar-right ">
+
+                <ul class="nav navbar-nav">
+                  <!-- Offcanvas -->
+                  <li class="custom-dropdown">
+                    <a class="offcanvas-toggler active custom-dropdown-toggler" data-offcanvas="contact-off" href="javascript:" >
+                      <i class="mdi mdi-contacts icon"></i>
+                    </a>
+                  </li>
+                  <!-- User Account -->
+                  <li class="dropdown user-menu">
+                    <button class="dropdown-toggle nav-link" data-toggle="dropdown">
+                      <img src="../static/images/user/user-xs-01.jpg" class="user-image rounded-circle" alt="User Image" />
+                      <span class="d-none d-lg-inline-block">{{session['admin_fname']}} {{session['admin_lname']}}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li>
+                        <a class="dropdown-link-item" href="{{url_for('view_profile')}}">
+                          <i class="mdi mdi-account-outline"></i>
+                          <span class="nav-text">My Profile</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-link-item" href="{{url_for('edit_profile')}}">
+                          <i class="mdi mdi-settings"></i>
+                          <span class="nav-text">Account Setting</span>
+                        </a>
+                      </li>
+
+                      <li class="dropdown-footer">
+                        <a class="dropdown-link-item" href="{{url_for('logout')}}"> <i class="mdi mdi-logout"></i> Log Out </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+
+          </header>
+
+        <!-- ====================================
+        ——— CONTENT WRAPPER
+        ===================================== -->
+        <div class="content-wrapper">
+          <div class="content">
+            <!-- Card Profile -->
+            <div class="card card-default card-profile">
+                <div class="card-header-bg" style="background-image:url(assets/img/user/user-bg-01.jpg)"></div>
+
+                    <div class="card-body card-profile-body">
+
+                        <div class="profile-avata">
+                            <img class="rounded-circle" src="../static/images/user/user-md-01.jpg" alt="Avata Image">
+                            <span class="h5 d-block mt-3 mb-2">{{session['admin_fname']}} {{session['admin_lname']}}</span>
+                            <span class="d-block">{{session['admin_email']}}</span>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer card-profile-footer">
+                        <ul class="nav nav-border-top justify-content-center">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{url_for('view_profile')}}">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{url_for('edit_profile')}}">Settings</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class = "col-xl-4">
+                      <div class = "card card-default">
+                        <div class = "card-header">
+                          <h2>Resolved Complaints by You</h2>
+                        </div>
+
+                        <div class = "card-body pt-3 pb-4">
+                          <div class = "circle circle-lg" data-size ="200" data-value="{{percent}}" data-thickness="20" data-fill="{&quot;color&quot;: &quot;#35D00E&quot;}">
+
+                            <div class = "circle-content">
+                              <h2 class = "text-uppercase font-weight-bold">{{percent * 100}}%</h2>
+                            </div> 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class = "col-lg-6">
+                      <div class = "card card-default pb-4">
+                        <div class="contact-info px-4">
+                          <p class="text-dark font-weight-medium pt-4 mb-2">Email Address</p>
+                          <p>{{session['admin_email']}}</p>
+                          <p class="text-dark font-weight-medium pt-4 mb-2">User ID</p>
+                          <p>{{session['admin_id']}}</p>
+                          <p class="text-dark font-weight-medium pt-4 mb-2">Full Name</p>
+                          <p>{{session['admin_fname']}} {{session['admin_lname']}}</p>
+                          <p class="text-dark font-weight-medium pt-4 mb-2">Department</p>
+                          <p>{{session['admin_department']}}</p>
+                        </div>
+                      </div>
+                      
+                    </div>
+
+                </div>
+              </div>    
+            </div>
+        
+            <!-- Footer -->
+            <footer class="footer mt-auto">
+
+              <div class="copyright bg-white">
+                <p>
+                  &copy; <span id="copy-year"></span> Copyright Mono Dashboard Bootstrap Template by <a class="text-primary" href="http://www.iamabdus.com/" target="_blank" >Abdus</a>.
+                </p>
+              </div>
+
+              <script>
+                  var d = new Date();
+                  var year = d.getFullYear();
+                  document.getElementById("copy-year").innerHTML = year;
+              </script>
+            </footer>
+
+          </div>
+        </div>
+    
+        <!-- Card Offcanvas -->
+        <div class="card card-offcanvas" id="contact-off" >
+            <div class="card-header">
+                <h2>Contacts</h2>
+            </div>
+
+            <div class="card-body">
+
+              {% for a in department_admin %}
+                <div class ="media media-sm">
+                    <div class = "media-sm-wrapper">
+                        <img src="images/user/user-sm-01.jpg" alt="User Image">
+                    </div>
+                
+                    <div class = "media-body">
+                        <span class="title">{{a[0]}} {{a[1]}}</span>
+                        <span class="discribe">{{a[2]}}</span>
+                    </div>
+                </div>
+
+              {% endfor %}
+
+            </div>
+          </div>
+
+  <script src="../static/plugins/jquery/jquery.min.js"></script>
+  <script src="../static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/plugins/simplebar/simplebar.min.js"></script>
+  <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+  <script src="../static/plugins/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+  <script src="../static/plugins/apexcharts/apexcharts.js"></script>
+  <script src="../static/js/mono.js"></script>
+  <script src="../static/js/chart.js"></script>
+  <script src="../static/js/map.js"></script>
+  <script src="../static/js/custom.js"></script>
+  <script src="../static/plugins/circle-progress/circle-progress.js"></script>
+</body>
+</html>

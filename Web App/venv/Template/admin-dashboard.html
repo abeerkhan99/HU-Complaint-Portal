@@ -8,12 +8,11 @@
 -->
 
 <html lang="en" dir="ltr">
-  <head>
-  <meta charset="utf-8" />
+<head><meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Admin Dashboard</title>
+  <title>Student Dashboard</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
@@ -42,485 +41,320 @@
   <script src="../static/plugins/nprogress/nprogress.js"></script>
 </head>
 
-  <body class="navbar-fixed sidebar-fixed" id="body">
-    <script>
-      NProgress.configure({ showSpinner: false });
-      NProgress.start();
-    </script>
+<body class="navbar-fixed sidebar-fixed" id="body">
+  <script>
+    NProgress.configure({ showSpinner: false });
+    NProgress.start();
+  </script>
+
+  <!-- ====================================
+  ——— WRAPPER
+  ===================================== -->
+  <div class="wrapper">
+    
+    <!-- ====================================
+      ——— LEFT SIDEBAR WITH OUT FOOTER
+    ===================================== -->
+    <aside class="left-sidebar sidebar-dark" id="left-sidebar">
+      <div id="sidebar" class="sidebar sidebar-with-footer">
+        <!-- Aplication Brand -->
+        <div class="app-brand">
+          <a>
+            <img src="../static/images/habib.png" alt="Mono">
+            <span class="brand-name">Habib University</span>
+          </a>
+        </div>
+        
+        <!-- begin sidebar scrollbar -->
+        <div class="sidebar-left" data-simplebar style="height: 100%;">
+          <!-- sidebar menu -->
+          <ul class="nav sidebar-inner" id="sidebar-menu">
+            <li class = "section-title">Home</li>
+            <li>
+              <a class="sidenav-item-link" href="{{url_for('dashboard')}}">
+                <i class="mdi mdi-briefcase-account-outline"></i>
+                <span class="nav-text">Admin Dashboard</span>
+              </a>
+            </li>
+            <li class = "section-title">Pages</li>
+            <li>
+              <a class="sidenav-item-link" href="{{url_for('view_complaint')}}">
+                <i class="mdi mdi-square-edit-outline"></i>
+                <span class="nav-text">View Complaints</span>
+              </a>
+            </li>
+            <li class = "section-title">Profile</li>
+            <li>
+              <a class="sidenav-item-link" href="{{url_for('view_profile')}}">
+                <i class="mdi mdi-account"></i>
+                <span class="nav-text">View my Profile</span>
+              </a>
+            </li>
+        
+        </div>
+      </div>
+    </aside>
 
     <!-- ====================================
-    ——— WRAPPER
+    ——— PAGE WRAPPER
     ===================================== -->
-    <div class="wrapper">
-      
-        <!-- ====================================
-          ——— LEFT SIDEBAR WITH OUT FOOTER
-        ===================================== -->
-        <aside class="left-sidebar sidebar-dark" id="left-sidebar">
-          <div id="sidebar" class="sidebar sidebar-with-footer">
-            <!-- Aplication Brand -->
-            <div class="app-brand">
-              <a href="/index.html">
-                <img src="../static/images/habib.png" alt="Mono">
-                <span class="brand-name">Habib University</span>
-              </a>
-            </div>
-            <!-- begin sidebar scrollbar -->
-            <div class="sidebar-left" data-simplebar style="height: 100%;">
-              <!-- sidebar menu -->
-              <ul class="nav sidebar-inner" id="sidebar-menu">
-              
-                  <li>
-                    <a class="sidenav-item-link" href="{{url_for('admin_dashboard')}}">
-                      <i class="mdi mdi-briefcase-account-outline"></i>
-                      <span class="nav-text">Admin Dashboard</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="sidenav-item-link" href="{{url_for('view_complaint_admin')}}">
-                      <i class="mdi mdi-briefcase-account-outline"></i>
-                      <span class="nav-text">View a Complaint</span>
-                    </a>
-                  </li> 
-                  <li>
-                    <a class="sidenav-item-link" href="{{url_for('view_complaint')}}">
-                      <i class="mdi mdi-briefcase-account-outline"></i>
-                      <span class="nav-text">View my Profile</span>
-                    </a>
-                  </li> 
-                  <li>
-                    <a class="sidenav-item-link" href="{{url_for('view_complaint')}}">
-                      <i class="mdi mdi-briefcase-account-outline"></i>
-                      <span class="nav-text">View Programs</span>
-                    </a>
-                  </li> 
-                  <li>
-                    <a class="sidenav-item-link" href="{{url_for('view_complaint')}}">
-                      <i class="mdi mdi-briefcase-account-outline"></i>
-                      <span class="nav-text">View Departments</span>
-                    </a>
-                  </li> 
-            </div>
-
-            <div class="sidebar-footer">
-            </div>
-          </div>
-        </aside>
-
-      <!-- ====================================
-      ——— PAGE WRAPPER
-      ===================================== -->
-      <div class="page-wrapper">
+    <div class="page-wrapper">
         
-          <!-- Header -->
-          <header class="main-header" id="header">
-            <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
-              <!-- Sidebar toggle button -->
-              <button id="sidebar-toggler" class="sidebar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-              </button>
+      <!-- Header -->
+      <header class="main-header" id="header">
+        <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+          <!-- Sidebar toggle button -->
+          <button id="sidebar-toggler" class="sidebar-toggle">
+            <span class="sr-only">Toggle navigation</span>
+          </button>
 
-              <span class="page-title">HU Complaint Portal</span>
+          <span class="page-title">HU Complaint Portal</span>
 
-              <div class="navbar-right ">
+          <div class="navbar-right ">
 
-                <ul class="nav navbar-nav">
-                  <li class="custom-dropdown">
-                    <button class="notify-toggler custom-dropdown-toggler">
-                      <i class="mdi mdi-bell-outline icon"></i>
-                      <span class="badge badge-xs rounded-circle">21</span>
-                    </button>
-                    <div class="dropdown-notify">
-
-                      <header>
-                        <div class="nav nav-underline" id="nav-tab" role="tablist">
-                          <a class="nav-item nav-link active" id="all-tabs" data-toggle="tab" href="#all" role="tab" aria-controls="nav-home"
-                            aria-selected="true">All (5)</a>
-                          <a class="nav-item nav-link" id="message-tab" data-toggle="tab" href="#message" role="tab" aria-controls="nav-profile"
-                            aria-selected="false">Msgs (4)</a>
-                          <a class="nav-item nav-link" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="nav-contact"
-                            aria-selected="false">Others (3)</a>
-                        </div>
-                      </header>
-
-                      <div class="" data-simplebar style="height: 325px;">
-                        <div class="tab-content" id="myTabContent">
-
-                          <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tabs">
-
-                            <div class="media media-sm bg-warning-10 p-4 mb-0">
-                              <div class="media-sm-wrapper">
-                                <a href="user-profile.html">
-                                  <img src="../static/images/user/user-sm-02.jpg" alt="User Image">
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Student Name</span>
-                                  <span class="discribe">Extremity sweetness difficult behaviour he of. On disposal of as landlord horrible. Afraid at highly months do things on at.</span>
-                                  <span class="time">
-                                    <time>Just now</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm p-4 bg-light mb-0">
-                              <div class="media-sm-wrapper bg-primary">
-                                <a href="user-profile.html">
-                                  <i class="mdi mdi-calendar-check-outline"></i>
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">New event added</span>
-                                  <span class="discribe">1/3/2014 (1pm - 2pm)</span>
-                                  <span class="time">
-                                    <time>10 min ago...</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm p-4 mb-0">
-                              <div class="media-sm-wrapper">
-                                <a href="user-profile.html">
-                                  <img src="../static/images/user/user-sm-03.jpg" alt="User Image">
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Sagge Hudson</span>
-                                  <span class="discribe">On disposal of as landlord Afraid at highly months do things on at.</span>
-                                  <span class="time">
-                                    <time>1 hrs ago</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm p-4 mb-0">
-                              <div class="media-sm-wrapper bg-info-dark">
-                                <a href="user-profile.html">
-                                  <i class="mdi mdi-account-multiple-check"></i>
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Add request</span>
-                                  <span class="discribe">Add Dany Jones as your contact.</span>
-                                  <div class="buttons">
-                                    <a href="#" class="btn btn-sm btn-success shadow-none text-white">accept</a>
-                                    <a href="#" class="btn btn-sm shadow-none">delete</a>
-                                  </div>
-                                  <span class="time">
-                                    <time>6 hrs ago</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm p-4 mb-0">
-                              <div class="media-sm-wrapper bg-info">
-                                <a href="user-profile.html">
-                                  <i class="mdi mdi-playlist-check"></i>
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Task complete</span>
-                                  <span class="discribe">Afraid at highly months do things on at.</span>
-                                  <span class="time">
-                                    <time>1 hrs ago</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                          </div>
-
-                          <div class="tab-pane fade" id="message" role="tabpanel" aria-labelledby="message-tab">
-
-                            <div class="media media-sm p-4 mb-0">
-                              <div class="media-sm-wrapper">
-                                <a href="user-profile.html">
-                                  <img src="../static/images/user/user-sm-01.jpg" alt="User Image">
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Selena Wagner</span>
-                                  <span class="discribe">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
-                                  <span class="time">
-                                    <time>15 min ago</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm p-4 mb-0">
-                              <div class="media-sm-wrapper">
-                                <a href="user-profile.html">
-                                  <img src="../static/images/user/user-sm-03.jpg" alt="User Image">
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Sagge Hudson</span>
-                                  <span class="discribe">On disposal of as landlord Afraid at highly months do things on at.</span>
-                                  <span class="time">
-                                    <time>1 hrs ago</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm bg-warning-10 p-4 mb-0">
-                              <div class="media-sm-wrapper">
-                                <a href="user-profile.html">
-                                  <img src="../static/images/user/user-sm-02.jpg" alt="User Image">
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">John Doe</span>
-                                  <span class="discribe">Extremity sweetness difficult behaviour he of. On disposal of as landlord horrible. Afraid
-                                    at highly months do things on at.</span>
-                                  <span class="time">
-                                    <time>Just now</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm p-4 mb-0">
-                              <div class="media-sm-wrapper">
-                                <a href="user-profile.html">
-                                  <img src="../static/images/user/user-sm-04.jpg" alt="User Image">
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Albrecht Straub</span>
-                                  <span class="discribe"> Beatae quia natus assumenda laboriosam, nisi perferendis aliquid consectetur expedita non tenetur.</span>
-                                  <span class="time">
-                                    <time>Just now</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                          </div>
-                          <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="contact-tab">
-
-                            <div class="media media-sm p-4 bg-light mb-0">
-                              <div class="media-sm-wrapper bg-primary">
-                                <a href="user-profile.html">
-                                  <i class="mdi mdi-calendar-check-outline"></i>
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">New event added</span>
-                                  <span class="discribe">1/3/2014 (1pm - 2pm)</span>
-                                  <span class="time">
-                                    <time>10 min ago...</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm p-4 mb-0">
-                              <div class="media-sm-wrapper bg-info-dark">
-                                <a href="user-profile.html">
-                                  <i class="mdi mdi-account-multiple-check"></i>
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Add request</span>
-                                  <span class="discribe">Add Dany Jones as your contact.</span>
-                                  <div class="buttons">
-                                    <a href="#" class="btn btn-sm btn-success shadow-none text-white">accept</a>
-                                    <a href="#" class="btn btn-sm shadow-none">delete</a>
-                                  </div>
-                                  <span class="time">
-                                    <time>6 hrs ago</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                            <div class="media media-sm p-4 mb-0">
-                              <div class="media-sm-wrapper bg-info">
-                                <a href="user-profile.html">
-                                  <i class="mdi mdi-playlist-check"></i>
-                                </a>
-                              </div>
-                              <div class="media-body">
-                                <a href="user-profile.html">
-                                  <span class="title mb-0">Task complete</span>
-                                  <span class="discribe">Afraid at highly months do things on at.</span>
-                                  <span class="time">
-                                    <time>1 hrs ago</time>...
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-
-                      <footer class="border-top dropdown-notify-footer">
-                        <div class="d-flex justify-content-between align-items-center py-2 px-4">
-                          <span>Last updated 3 min ago</span>
-                          <a id="refress-button" href="javascript:" class="btn mdi mdi-cached btn-refress"></a>
-                        </div>
-                      </footer>
-                    </div>
+            <ul class="nav navbar-nav">
+              <!-- User Account -->
+              <li class="dropdown user-menu">
+                <button class="dropdown-toggle nav-link" data-toggle="dropdown">
+                  <img src="../static/images/user/user-xs-01.jpg" class="user-image rounded-circle" alt="User Image" />
+                  <span class="d-none d-lg-inline-block">{{session['admin_fname']}} {{session['admin_lname']}}</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li>
+                    <a class="dropdown-link-item" href="{{url_for('view_profile')}}">
+                      <i class="mdi mdi-account-outline"></i>
+                      <span class="nav-text">My Profile</span>
+                    </a>
                   </li>
-                  <!-- User Account -->
-                  <li class="dropdown user-menu">
-                    <button class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <img src="../static/images/user/user-xs-01.jpg" class="user-image rounded-circle" alt="User Image" />
-                      <span class="d-none d-lg-inline-block">John Doe</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                      <li>
-                        <a class="dropdown-link-item" href="user-profile.html">
-                          <i class="mdi mdi-account-outline"></i>
-                          <span class="nav-text">My Profile</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a class="dropdown-link-item" href="user-account-settings.html">
-                          <i class="mdi mdi-settings"></i>
-                          <span class="nav-text">Account Setting</span>
-                        </a>
-                      </li>
+                  <li>
+                    <a class="dropdown-link-item" href="{{url_for('edit_profile')}}">
+                      <i class="mdi mdi-settings"></i>
+                      <span class="nav-text">Account Setting</span>
+                    </a>
+                  </li>
 
-                      <li class="dropdown-footer">
-                        <a class="dropdown-link-item" href="{{url_for('logout')}}"> <i class="mdi mdi-logout"></i> Log Out </a>
-                      </li>
-                    </ul>
+                  <li class="dropdown-footer">
+                    <a class="dropdown-link-item" href="{{url_for('logout')}}"> <i class="mdi mdi-logout"></i> Log Out </a>
                   </li>
                 </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+
+      <!-- ====================================
+      ——— CONTENT WRAPPER
+      ===================================== -->
+      <div class="content-wrapper">
+        <div class="content">
+          <!-- For Components documentaion -->
+          <div class="card card-default">
+            <div class="px-6 py-4">
+              <p>Hello, <span class="text-secondary text-capitalize">{{session['admin_fname']}} {{session['admin_lname']}}!</span> Navigate Habib Complaint Portal and keep in touch with concerned Departments.</p>
+            </div>
+          </div>
+
+
+          <!-- Card with Image Overlay -->
+          <div class="card card-default">
+            <div class="card-header">
+              <h2>What you can Do</h2>
+            </div>
+
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12 col-lg-6 col-xl-3">
+                  <div class="card mb-4 bg-overlay-primary">
+                    <img class="card-img-top" src="../static/images/elements/cc2a.jpg">
+
+                    <div class="card-img-overlay">
+                      <a href = "{{url_for('view_complaint')}}"><h5 class="card-title text-white">Complaint List</h5>
+                        <p class="card-text text-white pb-4 pt-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor </p>
+                      </a>
+                      <a href="#" class="text-white">Last update 2 mins ago</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-lg-6 col-xl-3">
+                  <div class="card mb-4 bg-overlay-success">
+                    <img class="card-img-top" src="../static/images/elements/cc2a.jpg">
+                    <div class="card-img-overlay">
+                      <a href = "{{url_for('make_complaint')}}"><h5 class="card-title text-white">Reassign Complaint</h5>
+                      <p class="card-text pb-4 pt-1 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor
+                      </p></a>
+                      <a href="#" class="text-white">Last update 2 mins ago</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-lg-6 col-xl-3">
+                  <div class="card mb-4 bg-overlay-secondary">
+                    <img class="card-img-top" src="../static/images/elements/cc2a.jpg">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title text-white">Resolve Complaint</h5>
+                      <p class="card-text text-white pb-4 pt-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor
+                      </p>
+                      <a href="#" class="text-white">Last update 2 mins ago</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-lg-6 col-xl-3">
+                  <div class="card mb-4 bg-overlay-info">
+                    <img class="card-img-top" src="../static/images/elements/cc2a.jpg">
+                    <div class="card-img-overlay">
+                      <h5 class="card-title text-white ">Complaint Status</h5>
+                      <p class="card-text pb-4 pt-1 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor
+                      </p>
+                      <a href="#" class="text-white">Last update 2 mins ago</a>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-            </nav>
 
-
-          </header>
-
-        <!-- ====================================
-        ——— CONTENT WRAPPER
-        ===================================== -->
-        <div class="content-wrapper">
-          <div class="content"><!-- For Components documentaion -->
-<div class="card card-default">
-  <div class="px-6 py-4">
-    <p>Hello! <span class="text-secondary text-capitalize">Admin Name</span></p>
-  </div>
-</div>
-
-
-<!-- Card with Image Overlay -->
-<div class="card card-default">
-  <div class="card-header">
-    <h2>What you can Do</h2>
-    
-  </div>
-  <div class="card-body">
-    <div class="collapse" id="collapse-card-5">
-
-    </div>
-
-    <div class="row">
-
-      <div class="col-md-12 col-lg-6 col-xl-3">
-        <div class="card mb-4 bg-overlay-primary">
-          <img class="card-img-top" src="../static/images/elements/cc2a.jpg">
-          <div class="card-img-overlay">
-            <a href = "{{url_for('view_complaint_admin')}}"><h5 class="card-title text-white">Complaint List</h5>
-            <p class="card-text text-white pb-4 pt-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do
-              eiusmod tempor </p></a>
-            <a href="#" class="text-white">Last update 2 mins ago</a>
+            </div>
           </div>
-        </div>
-      </div>
+          
+          <div class="row">
+            <div class="col-xl-4">
+              <div class="card card-default">
+                <div class="card-header">
+                  <h2>Resolved Complaints</h2>
+                </div>
+          
+                <div class="card-body pt-3 pb-4">
+                  <div class="circle circle-lg"
+                    data-size="200"
+                    data-value="{{resolved/(resolved + unresolved + pending)}}"
+                    data-thickness="20"
+                    data-fill="{
+                      &quot;color&quot;: &quot;#35D00E&quot;}">
+                      <div class="circle-content">
+                        <h2 class="text-uppercase font-weight-bold">{{((resolved/(resolved + unresolved + pending)) * 100) | round(1)}}%</h2>
+                        <strong></strong>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      <div class="col-md-12 col-lg-6 col-xl-3">
-        <div class="card mb-4 bg-overlay-success">
-          <img class="card-img-top" src="../static/images/elements/cc2a.jpg">
-          <div class="card-img-overlay">
-            <a href = "{{url_for('view_complaint_admin')}}"><h5 class="card-title text-white">Reassign Complaint</h5>
-            <p class="card-text pb-4 pt-1 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor
-            </p></a>
-            <a href="#" class="text-white">Last update 2 mins ago</a>
+            <div class="col-xl-4">
+              <div class="card card-default">
+                <div class="card-header">
+                  <h2>Unresolved Complaints</h2>
+                </div>
+          
+                <div class="card-body pt-3 pb-4">
+                  <div class="circle circle-lg"
+                    data-size="200"
+                    data-value="{{unresolved/(resolved + unresolved + pending)}}"
+                    data-thickness="20"
+                    data-fill="{
+                      &quot;color&quot;: &quot;#35D00E&quot;}">
+                      <div class="circle-content">
+                        <h2 class="text-uppercase font-weight-bold">{{((unresolved/(resolved + unresolved + pending)) * 100) | round(1)}}%</h2>
+          
+                        <strong></strong>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-4">
+              <div class="card card-default">
+                <div class="card-header">
+                  <h2>Pending Complaints</h2>
+                </div>
+          
+                <div class="card-body pt-3 pb-4">
+                  <div class="circle circle-lg"
+                    data-size="200"
+                    data-value="{{pending/(resolved + unresolved + pending)}}"
+                    data-thickness="20"
+                    data-fill="{
+                      &quot;color&quot;: &quot;#35D00E&quot;}">
+                      <div class="circle-content">
+                        <h2 class="text-uppercase font-weight-bold">{{((pending/(resolved + unresolved + pending)) * 100) | round(1)}}%</h2>
+          
+                        <strong></strong>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          
 
-      <div class="col-md-12 col-lg-6 col-xl-3">
-        <div class="card mb-4 bg-overlay-secondary">
-          <img class="card-img-top" src="../static/images/elements/cc2a.jpg">
-          <div class="card-img-overlay">
-            <h5 class="card-title text-white">Resolve Complaint</h5>
-            <p class="card-text text-white pb-4 pt-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor
-            </p>
-            <a href="#" class="text-white">Last update 2 mins ago</a>
+              
+          <div class="row">
+            <div class="col-lg-6">
+              <!-- To Do list -->
+              <div class="card card-default pb-4" id="todo">
+                <div class="card-header mb-3">
+                    <h2>To Do list</h2>
+                </div>
+
+                <div class="card-body" data-simplebar>
+                    <div class="todo-single-item d-none" id="todo-input">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Enter Todo" autofocus>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="todo-list" id="todo-list">
+
+                  {% for c in complaint_title %}
+
+                    <div class="todo-single-item d-flex flex-row justify-content-between ">
+                      <i class="mdi"></i>
+                      <span>{{c[0]}}</span>
+                      <span class="badge badge-success">{{c[1]}}</span>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div class="col-md-12 col-lg-6 col-xl-3">
-        <div class="card mb-4 bg-overlay-info">
-          <img class="card-img-top" src="../static/images/elements/cc2a.jpg">
-          <div class="card-img-overlay">
-            <h5 class="card-title text-white ">Complaint Status</h5>
-            <p class="card-text pb-4 pt-1 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod tempor
-            </p>
-            <a href="#" class="text-white">Last update 2 mins ago</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
         </div>
         
-          <!-- Footer -->
-          <footer class="footer mt-auto">
-            <div class="copyright bg-white">
-              <p>
-                &copy; <span id="copy-year"></span> Copyright Mono Dashboard Bootstrap Template by <a class="text-primary" href="http://www.iamabdus.com/" target="_blank" >Abdus</a>.
-              </p>
-            </div>
-            <script>
-                var d = new Date();
-                var year = d.getFullYear();
-                document.getElementById("copy-year").innerHTML = year;
-            </script>
-          </footer>
+        <!-- Footer -->
+        <footer class="footer mt-auto">
+          <div class="copyright bg-white">
+            <p>
+              &copy; <span id="copy-year"></span> Copyright Mono Dashboard Bootstrap Template by <a class="text-primary" href="http://www.iamabdus.com/" target="_blank" >Abdus</a>.
+            </p>
+          </div>
+          <script>
+              var d = new Date();
+              var year = d.getFullYear();
+              document.getElementById("copy-year").innerHTML = year;
+          </script>
+        </footer>
 
       </div>
     </div>
+  </div>
   
 
-    <script src="../static/plugins/jquery/jquery.min.js"></script>
-    <script src="../static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../static/plugins/simplebar/simplebar.min.js"></script>
-    <script src="../static/https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
-    
-    <script src="../static/plugins/prism/prism.js"></script>
+  <script src="../static/plugins/jquery/jquery.min.js"></script>
+  <script src="../static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/plugins/simplebar/simplebar.min.js"></script>
+  <script src="../static/https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+  
+  <script src="../static/plugins/prism/prism.js"></script>
 
-    <script src="../static/js/mono.js"></script>
-    <script src="../static/js/chart.js"></script>
-    <script src="../static/js/map.js"></script>
-    <script src="../static/js/custom.js"></script>
+  <script src="../static/js/mono.js"></script>
+  <script src="../static/js/chart.js"></script>
+  <script src="../static/js/map.js"></script>
+  <script src="../static/js/custom.js"></script>
+  <script src="../static/plugins/circle-progress/circle-progress.js"></script>
 
-    <!--  -->
-  </body>
+
+</body>
 </html>

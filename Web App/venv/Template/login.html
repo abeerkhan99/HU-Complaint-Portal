@@ -61,17 +61,18 @@
 
                     <h4 class="text-dark mb-6 text-center">Login</h4>
 
-                    <form action="/submit" method = "POST">
+                    <form action="/submit" method = "POST" onsubmit = "return to_submit();">
                       <div class="row">
                         <div class="form-group col-md-12 mb-4">
-
+                        
                           {% if message %}
-                            <p style="color: red;"> {{ message | safe }} </p>
+                            <label  id = "message" style="color: red;"> {{ message | safe }} </label>
                           {% endif %}
-
+                        
                           <input type="email" name = "email" class="form-control input-lg" id="email" aria-describedby="emailHelp"
-                            placeholder="Email Address" required>
+                            placeholder="Email Address"  required>
                         </div>
+
                         <div class="form-group col-md-12 ">
                           <input type="password" name = "password" class="form-control input-lg" id="password" placeholder="Password" required>
                         </div>
@@ -79,12 +80,11 @@
 
                           <div class="d-flex justify-content-between mb-3">
 
-                            <a class="text-color" href="{{url_for('reset_pass')}}"> Forgot password? </a>
+                            <a class="text-color" href="{{url_for('reset')}}"> Forgot password? </a>
 
                           </div>
 
                           <button type="submit" class="btn btn-primary btn-pill mb-4">Sign In</button>
-
                           <p>Don't have an account yet?
                             <a class="text-blue" href="{{url_for('register')}}">Sign Up</a>
                           </p>
@@ -97,6 +97,25 @@
             </div>
           </div>
         </div>
+
+  <script>
+
+    function to_submit()
+    {
+      var email = document.getElementById('email');
+      if ( (/^([a-z]{2})\d{5}@st.habib.edu.pk$/.test(email.value)) || ((/^([a-z]{2})\d{5}@habib.edu.pk$/.test(email.value))) )
+      {
+        return true;
+      }
+      else
+      {
+        document.getElementById('message').innerHTML = "";
+        document.getElementById('message').innerHTML = "Incorrect email format!";
+        return false;
+      }
+    }
+
+  </script>
 
 </body>
 </html>
