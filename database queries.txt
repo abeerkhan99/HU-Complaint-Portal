@@ -60,7 +60,7 @@ create table Admin
 	AdminLastName varchar(5000) not null,
 	AdminEmail varchar(5000) not null,
 	AdminPassword varchar(5000) not null,
-	Admin_Deparment int,
+	Admin_Department int,
 	constraint FK_Admin_Department foreign key(Admin_Department) references Department(DepartmentID)
 );
 
@@ -74,12 +74,14 @@ create table Student
 	StudentLastName varchar(5000) not null,
 	StudentEmail varchar(5000) not null,
 	StudentPassword varchar(5000) not null,
+	Batch varchar(4) not null,
 	Student_Program int,
 	constraint FK_Student_Program foreign key(Student_Program) references Program(ProgramID)
 );
 
-insert into Student(StudentID, StudentFirstName, StudentLastName, StudentEmail, StudentPassword, Student_Program)
-values ('ak05419', 'Abeer', 'Khan', 'ak05419@st.habib.edu.pk', '12345', 1);
+
+insert into Student(StudentID, StudentFirstName, StudentLastName, StudentEmail, StudentPassword, Batch, Student_Program)
+values ('ak05419', 'Abeer', 'Khan', 'ak05419@st.habib.edu.pk', '12345', '2023', 1);
 
 create table Complaint
 (
