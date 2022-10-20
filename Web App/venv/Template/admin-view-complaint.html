@@ -172,35 +172,27 @@
                                     <th scope="col">Complaint Lodged</th>
                                     <th scope="col">Department</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                    <th scope="row">1</th>
-                                    <td>19-04-2022</td>
-                                    <td>RO</td>
-                                    <td>Unresolved</td>
-                                    <td>
-                                        <a href = "{{url_for('complaint_detail')}}"><button type="button" class="btn btn-primary"><i class="far fa-eye" >Complaint </i></button></a>
-                                        <a href = "{{url_for('reassign_complaint')}}"><button type="button" class="btn btn-primary" ><i class="far fa-eye">Reassign</i></button></a>
-                                        <button type="button" class="btn btn-primary"><i class="far fa-eye">Resolve</i></button>
 
-                                      </td>
-                                
-                                    </tr>
+                                  {% for x in complaint_list %}
                                     <tr>
-                                    <th scope="row">2</th>
-                                    <td>21-07-2021</td>
-                                    <td>OCS</td>
-                                    <td>Unresolved</td>
-                                    <td>
-                                        <a href = "{{url_for('complaint_detail')}}"><button type="button" class="btn btn-primary" ><i class="far fa-eye"href = "{{url_for('complaint_detail')}}" >Complaint</i></button></a>
-                                        <a href = "{{url_for('reassign_complaint')}}"><button type="button" class="btn btn-primary" ><i class="far fa-eye">Reassign</i></button></a>
-                                        <button type="button" class="btn btn-primary" style="margin-left:8vw;" ><i class="far fa-eye">Resolve</i></button>
-                                    </td>
-
+                                      <th scope = "row">{{x[0]}}</th>
+                                      <td>{{x[1]}}</td>
+                                      <td>{{x[2]}}</td>
+                                      <td>{{x[3]}}</td>
+                                      <td>
+                                        <a href = "javascript:void(0)" id = "{{loop.index0}}" data-toggle="modal" data-target="#modal-contact" data-date = "{{x[1]}}" data-department = "{{x[2]}}" data-status = "{{x[3]}}" data-c-title = "{{x[4]}}" data-c-content = "{{x[5]}}"><button type="button"  class="btn btn-primary" style="margin-left:4vw;"><i class="far fa-eye" >Complaint</i></button></a>
+                                        {% if x[3] == "Unresolved" or x[3] == "Pending" %}
+                                          <button type="button" class="btn btn-primary" ><i class="far fa-eye">Reassign</i></button>
+                                          <button type="button" class="btn btn-primary" ><i class="far fa-eye">Resolve</i></button>
+                                        {% endif %}
+                                      </td> 
                                     </tr>
+
+                                  {% endfor %}
+                                  
                                 </tbody>
                                 </table>
                             </div>
@@ -208,6 +200,56 @@
 
                     </div>
                 </div>
+
+                <!-- Contact Modal -->
+                <div class="modal fade" id="modal-contact" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header justify-content-end border-bottom-0">
+                     
+                
+                      <button type="button" class="btn-close-icon" data-dismiss="modal" aria-label="Close">
+                        <i class="mdi mdi-close"></i>
+                      </button>
+
+                    </div>
+                    
+                    <div class="modal-body pt-0">
+                      <div class="row no-gutters">
+                        
+                        <div class="col-lg-6">
+                          <div class="contact-info px-5">
+
+                            <h4 class="mb-1">Complaint Details</h4>
+                            <p class="text-dark font-weight-medium pt-4 mb-2">Complaint Title</p>
+                            <p id = "ComplaintTitle"></p>
+
+                            <p class="text-dark font-weight-medium pt-4 mb-2">Complaint Content</p>
+                            <p id = "ComplaintContent"></p>
+                            
+                            <p class="text-dark font-weight-medium pt-4 mb-2">Complaint Date</p>
+                            <p id = "ComplaintDate"></p>
+
+                            <p class="text-dark font-weight-medium pt-4 mb-2">Complaint Status</p>
+                            <p id = "ComplaintStatus"></p>
+
+                            <p class="text-dark font-weight-medium pt-4 mb-2">Complaint Department</p>
+                            <p id = "ComplaintDepartment"></p>
+
+                            <p></p>
+                      
+                          </div>
+
+                        </div>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div></div>
+
             </div>
           <!-- Footer -->
           <footer class="footer mt-auto">
@@ -238,6 +280,45 @@
     <script src="../static/js/chart.js"></script>
     <script src="../static/js/map.js"></script>
     <script src="../static/js/custom.js"></script>
+
+    
+    <script>
+      
+      var e = '{{len_list}}';
+
+      for (var i=0; i<e; i++) 
+      {
+        document.getElementById(i.toString()).addEventListener('click', handler, false);
+      }
+
+      function handler() 
+      {
+        var c_date = this.getAttribute("data-date");
+        var c_department = this.getAttribute("data-department");
+        var c_status = this.getAttribute("data-status");
+        var c_title = this.getAttribute("data-c-title");
+        var c_content = this.getAttribute("data-c-content");
+
+        var e = document.getElementById("ComplaintTitle");
+        e.innerHTML = c_title;
+
+        
+        var e = document.getElementById("ComplaintContent");
+        e.innerHTML = c_content;
+
+        var e = document.getElementById("ComplaintDate");
+        e.innerHTML = c_date;
+        
+        var e = document.getElementById("ComplaintStatus");
+        e.innerHTML = c_status;
+
+        
+        var e = document.getElementById("ComplaintDepartment");
+        e.innerHTML = c_department;
+
+
+      }
+    </script>
 
     <!--  -->
   </body>
