@@ -242,13 +242,10 @@ def delete_complaint(number, date, dept, status, title, content):
         cur.execute('select StatusID from Status where StatusName = %s', (status,))
         status_id = cur.fetchall()
 
-        cur.execute('delete from Complaint where ComplaintID = %s and ComplaintDate = %s and Complaint_DepartmentID = %s and Complaint_Status = %s and ComplaintTitle = %s and ComplaintContent = %s', (number, date, department_id, status_id, title, content))
+        cur.execute('delete from Complaint where ComplaintID = %s and ComplaintDate = %s and Complaint_DepartmentID = %s and Complaint_Status = %s and ComplaintTitle = %s and ComplaintContent = %s', (number, date, department_id[0][0], status_id[0][0], title, content))
         conn.commit()
 
-        cur.execute('select ComplaintID, ComplaintDate, DepartmentName, StatusName, ComplaintTitle, ComplaintContent from Complaint, Student, Department, Status where Complaint_DepartmentID = DepartmentID and Complaint_StudentID = StudentID and Complaint_Status = StatusID and Complaint_StudentID = %s', (session['student_id'],))
-        complaint_list = cur.fetchall()
-
-        return render_template('student-view-complaint.html', message = "Complaint deleted successfully!", complaint_list = complaint_list, len_list = len(complaint_list))
+        return redirect('/view-complaint')
 
     else:
         return redirect('/login')
