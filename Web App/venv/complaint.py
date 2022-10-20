@@ -8,6 +8,17 @@ import datetime
 def view_complaint():
     if session['user_type'] == "Admin":
 
+        # remove data from session
+        try:
+            session.pop('a_number')
+            session.pop('a_date')
+            session.pop('a_department')
+            session.pop('a_status')
+            session.pop('a_title')
+            session.pop('a_content')
+        except:
+            pass
+
         cur.execute('select ComplaintID, ComplaintDate, DepartmentName, StatusName, ComplaintTitle, ComplaintContent from Complaint, Department, Status where Complaint_DepartmentID = DepartmentID and Complaint_Status = StatusID and DepartmentName = %s', (session['admin_department'],))
         complaint_list = cur.fetchall()
 
@@ -15,15 +26,18 @@ def view_complaint():
 
     elif session['user_type'] == "Student":
 
-        # pop edit complaint sessions
-        session.pop('number')
-        session.pop('date')
-        session.pop('department')
-        session.pop('status')
-        session.pop('title')
-        session.pop('content')
+        # remove data from session
+        try:
+            session.pop('number')
+            session.pop('date')
+            session.pop('department')
+            session.pop('status')
+            session.pop('title')
+            session.pop('content')
+        except:
+            pass
 
-        cur.execute('select ComplaintID, ComplaintDate, DepartmentName, StatusName, ComplaintTitle, ComplaintContent from Complaint, Student, Department, Status where Complaint_DepartmentID = DepartmentID and Complaint_StudentID = StudentID and Complaint_Status = StatusID and Complaint_StudentID = %s', (session['student_id'],))
+        cur.execute('select * from Complaint, Department, Status where Complaint_Status = StatusID and Complaint_DepartmentID = DepartmentID and Complaint_StudentID = %s', (session['student_id'],))
         complaint_list = cur.fetchall()
 
         return render_template('student-view-complaint.html', complaint_list = complaint_list, len_list = len(complaint_list))
@@ -105,7 +119,7 @@ def edit_complaint(number, date, dept, status, title, content):
     else:
         return redirect('/login')
 
-@app.route('edit-complaint-submit', methods = ['GET', 'POST'])
+@app.route('/edit-complaint-submit', methods = ['GET', 'POST'])
 def edit_complaint_submit():
     if session['user_type'] == "Student":
 
@@ -139,16 +153,83 @@ def edit_complaint_submit():
     else:
         return redirect('/login')
 
-@app.route('/reassign-complaint')
-def reassign_complaint():
+@app.route('/reassign-complaint/<number>%<date>%<dept>-<status>-<title>-<content>')
+def reassign_complaint(number, date, dept, status, title, content):
+    if session['user_type'] == "Admin":
+
+        cur.execute('select DepartmentName from Department')
+        department = cur.fetchall()
+        
+        session['a_number'] = number
+        session['a_date'] = date
+        session['a_department'] = dept
+        session['a_status'] = status
+        session['a_title'] = title
+        session['a_content'] = content
+
+        return render_template('assign-complaint.html', department = department, number = number, date = date, dept = dept, status = status, title = title, content = content)
+
+    else:
         return redirect('/login')
 
-@app.route('/resolve-complaint')
-def resolve_complaint():
+@app.route('/reassign-complaint-submit', methods = ['GET', 'POST'])
+def reassign_complaint_submit():
+    if session['user_type'] == "Admin":
+        new_department = request.form.get('department')
+        if new_department == session['a_status']:
+            return redirect('/view-complaint')
+        else:
+            # update field in database
+
+            cur.execute('select DepartmentID from Department where DepartmentName = %s', (new_department,))
+            new_dept_id = cur.fetchall()
+
+            cur.execute('UPDATE Complaint SET Complaint_DepartmentID = %s  WHERE ComplaintID = %s and ComplaintDate = %s and ComplaintTitle = %s and ComplaintContent = %s and Complaint_DepartmentID = %s',
+            (new_dept_id, session['a_number'], session['a_date'], session['a_title'], session['a_content'], session['a_department']))
+
+            conn.commit()
+            return redirect('/view-complaint')
+    else:
         return redirect('/login')
 
-@app.route('/close-complaint')
-def close_complaint():
+@app.route('/resolve-complaint/<number>%<date>%<dept>-<status>-<title>-<content>')
+def resolve_complaint(number, date, dept, status, title, content):
+    if session['user_type'] == "Admin":
+
+        # update complaint status and complaint admin id
+        cur.execute('select DepartmentID from Department where DepartmentName = %s', (dept,))
+        department_id = cur.fetchall()
+
+        cur.execute('select StatusID from Status where StatusName = %s', ('Resolved',))
+        new_status_id = cur.fetchall()
+
+        cur.execute('UPDATE Complaint SET Complaint_Status = %s and Complaint_AdminID = %s  WHERE ComplaintID = %s and ComplaintDate = %s and ComplaintTitle = %s and ComplaintContent = %s and Complaint_DepartmentID = %s',
+        (new_status_id, session['admin_id'], number, date, title, content, department_id))
+
+        conn.commit()
+
+        return redirect('/view-complaint')
+
+    else:
+        return redirect('/login')
+
+@app.route('/close-complaint/<number>%<date>%<dept>-<status>-<title>-<content>')
+def close_complaint(number, date, dept, status, title, content):
+    # a resolved complaint can be closed by a student
+    # updates the complaint database by adding a resolvedate
+    if session['user_type'] == "Student":
+
+        cur.execute('select DepartmentID from Department where DepartmentName = %s', (dept,))
+        department_id = cur.fetchall()
+
+        cur.execute('UPDATE Complaint SET ResolveDate = %s WHERE ComplaintID = %s and ComplaintDate = %s and ComplaintTitle = %s and ComplaintContent = %s and Complaint_DepartmentID = %s',
+        (datetime.date.today(), number, date, title, content, department_id))
+
+        conn.commit()
+
+        return redirect('/view-complaint')
+
+    else:
         return redirect('/login')
 
 @app.route('/delete-complaint/<number>%<date>%<dept>-<status>-<title>-<content>')
