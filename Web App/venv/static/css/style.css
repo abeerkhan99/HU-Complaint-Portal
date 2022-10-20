@@ -5816,7 +5816,7 @@ a.close.disabled {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 1rem 1rem;
+  padding: 0.3rem 0.3rem;
   border-bottom: 1px solid #e5e9f2;
   border-top-left-radius: calc(0.3rem - 1px);
   border-top-right-radius: calc(0.3rem - 1px);
