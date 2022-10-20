@@ -140,8 +140,8 @@ def edit_complaint_submit():
             cur.execute('select DepartmentID from Department where DepartmentName = %s', (new_c_department,))
             new_dept = cur.fetchall()
 
-            cur.execute('UPDATE Complaint SET ComplaintTitle = %s and ComplaintContent = %s and Complaint_DepartmentID = %s  WHERE ComplaintID = %s and ComplaintDate = %s and ComplaintTitle = %s and ComplaintContent = %s',
-            (new_c_title, new_c_content, new_dept, session['number'], session['date'], session['title'], session['content']))
+            cur.execute("UPDATE Complaint SET ComplaintTitle = %s, ComplaintContent = %s, Complaint_DepartmentID = %s WHERE ComplaintID = %s and ComplaintDate = %s and ComplaintTitle = %s and ComplaintContent = %s",
+            (new_c_title, new_c_content, new_dept[0][0], session['number'], session['date'], session['title'], session['content']))
 
             conn.commit()
 
@@ -185,7 +185,7 @@ def reassign_complaint_submit():
             new_dept_id = cur.fetchall()
 
             cur.execute('UPDATE Complaint SET Complaint_DepartmentID = %s  WHERE ComplaintID = %s and ComplaintDate = %s and ComplaintTitle = %s and ComplaintContent = %s and Complaint_DepartmentID = %s',
-            (new_dept_id, session['a_number'], session['a_date'], session['a_title'], session['a_content'], session['a_department']))
+            (new_dept_id[0][0], session['a_number'], session['a_date'], session['a_title'], session['a_content'], session['a_department']))
 
             conn.commit()
             return redirect('/view-complaint')
@@ -204,7 +204,7 @@ def resolve_complaint(number, date, dept, status, title, content):
         new_status_id = cur.fetchall()
 
         cur.execute('UPDATE Complaint SET Complaint_Status = %s and Complaint_AdminID = %s  WHERE ComplaintID = %s and ComplaintDate = %s and ComplaintTitle = %s and ComplaintContent = %s and Complaint_DepartmentID = %s',
-        (new_status_id, session['admin_id'], number, date, title, content, department_id))
+        (new_status_id[0][0], session['admin_id'], number, date, title, content, department_id[0][0]))
 
         conn.commit()
 
@@ -223,7 +223,7 @@ def close_complaint(number, date, dept, status, title, content):
         department_id = cur.fetchall()
 
         cur.execute('UPDATE Complaint SET ResolveDate = %s WHERE ComplaintID = %s and ComplaintDate = %s and ComplaintTitle = %s and ComplaintContent = %s and Complaint_DepartmentID = %s',
-        (datetime.date.today(), number, date, title, content, department_id))
+        (datetime.date.today(), number, date, title, content, department_id[0][0]))
 
         conn.commit()
 
