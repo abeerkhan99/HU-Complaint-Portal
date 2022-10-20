@@ -108,3 +108,6 @@ values('Complaint 3', 'Profile is not working', CURRENT_DATE, 1, 'ak05419', 1);
 
 insert into Complaint(ComplaintTitle, ComplaintContent, ComplaintDate, ResolveDate, Complaint_DepartmentID, Complaint_StudentID, Complaint_AdminID, Complaint_Status)
 values('Complaint 4', 'DB is not working', '2022-03-17', CURRENT_DATE, 1, 'ak05419', 'aa05423', 3);
+
+insert into Complaint(ComplaintTitle, ComplaintContent, ComplaintDate,  Complaint_DepartmentID, Complaint_StudentID, Complaint_AdminID, Complaint_Status)
+values('Complaint 5', 'Login is not working', '2022-05-21', 1, 'ak05419', 'aa05423', 3);
