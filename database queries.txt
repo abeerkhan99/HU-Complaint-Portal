@@ -111,3 +111,6 @@ values('Complaint 4', 'DB is not working', '2022-03-17', CURRENT_DATE, 1, 'ak054
 
 insert into Complaint(ComplaintTitle, ComplaintContent, ComplaintDate,  Complaint_DepartmentID, Complaint_StudentID, Complaint_AdminID, Complaint_Status)
 values('Complaint 5', 'Login is not working', '2022-05-21', 1, 'ak05419', 'aa05423', 3);
+
+insert into Student(StudentID, StudentFirstName, StudentLastName, StudentEmail, StudentPassword, Batch, Student_Program)
+values ('fn05458', 'Fatima', 'Nasir', 'fn05458@st.habib.edu.pk', '12345', '2023', 1);
