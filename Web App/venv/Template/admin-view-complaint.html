@@ -185,8 +185,8 @@
                                       <td>
                                         <a href = "javascript:void(0)" id = "{{loop.index0}}" data-toggle="modal" data-target="#modal-contact" data-date = "{{x[1]}}" data-department = "{{x[2]}}" data-status = "{{x[3]}}" data-c-title = "{{x[4]}}" data-c-content = "{{x[5]}}"><button type="button"  class="btn btn-primary" style="margin-left:4vw;"><i class="far fa-eye" >Complaint</i></button></a>
                                         {% if x[3] == "Unresolved" or x[3] == "Pending" %}
-                                          <button type="button" class="btn btn-primary" ><i class="far fa-eye">Reassign</i></button>
-                                          <button type="button" class="btn btn-primary" ><i class="far fa-eye">Resolve</i></button>
+                                          <a href = "{{url_for('reassign_complaint', number = x[0], date = x[1], dept = x[2], status = x[3], title = x[4], content = x[5])}}"><button type="button" class="btn btn-primary" ><i class="far fa-eye">Reassign</i></button></a>
+                                          <a id = "resolve" href = "{{url_for('resolve_complaint', number = x[0], date = x[1], dept = x[2], status = x[3], title = x[4], content = x[5])}}"><button type="button" class="btn btn-primary" ><i class="far fa-eye">Resolve</i></button></a>
                                         {% endif %}
                                       </td> 
                                     </tr>
@@ -318,6 +318,17 @@
 
 
       }
+
+      var a = document.getElementById("resolve")
+      a.onclick = function(){
+        var check = confirm("Are you sure? You will not be able to re-open the complaint again.");
+        if (check == true) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
     </script>
 
     <!--  -->

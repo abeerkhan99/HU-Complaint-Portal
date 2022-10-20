@@ -14,7 +14,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Assign a Complaint</title>
+  <title>Complaint Details</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
@@ -59,43 +59,64 @@
                   </div>
                   <div class="card-body px-50 pb-50 pt-0">
 
-                    <h4 class="text-dark mb-6 text-center">Complaint Details</h4>
+                    <h4 class="text-dark mb-6 text-center">Edit Complaint Details</h4>
 
                     <div class="container">
-                      <div class="row">
-                        <div class="form-group col-md-12 mb-4">
-                            <p><label for="w3review">Complaint Title</label></p>
-                            <input type="text" class="form-control input-lg" id="c_title" aria-describedby="titleHelp"
-                              placeholder="Email Address" value = "Complaint Title" readonly>
-                        </div>
+                      <form action="/edit_complaint-submit" method="POST">
 
-                        <div class="form-group col-md-12 mb-4">
-                            <p><label for="w3review">Complaint Content</label></p>
-                            <textarea class="form-control input-lg" id="c_content" name="c_content" rows="4" cols="50" readonly>The complaint content goes here. 
-                            </textarea>
-                        </div>
+                        <div class="row">
+                          
+                          {% if message %}
+                            <label id = "error" style="color: red;"> {{ message | safe }} </label>
+                          {% endif %}
+                          
+                          <div class="form-group col-md-12 mb-4">
+                            <p><label for="w3review">Complaint Date</label></p>
+                            <input type="text" class="form-control input-lg" id="c_date" name = "c_date" aria-describedby="dateHelp"
+                              placeholder="Email Address" value = "{{date}}" readonly>
+                          </div>
 
-                        <div class="form-group col-md-12 mb-4">
-                          <p><label for="w3review">Current Department:</label></p>
-                          <input type="text" class="form-control input-lg" id="c_dep" aria-describedby="depHelp"
-                          placeholder="Assigned Department" value = "Assigned Department" readonly>
-                      </div>
+                          <div class="form-group col-md-12 mb-4">
+                              <p><label for="w3review">Complaint Title</label></p>
+                              <input type="text" class="form-control input-lg" id="c_title" name = "c_title" aria-describedby="titleHelp"
+                                placeholder="Email Address" value = "{{title}}" readonly>
+                          </div>
 
-                        <div class="form-group col-md-12 mb-4">
-                            <p><label for="w3review">Forward to:</label></p>
+                          <div class="form-group col-md-12 mb-4">
+                              <p><label for="w3review">Complaint Content</label></p>
+                              <textarea class="form-control input-lg" id="c_content" name="c_content" rows="4" cols="50" readonly>{{content}}. 
+                              </textarea>
+                          </div>
+
+                          <div class="form-group col-md-12 mb-4">
+                            <p><label for="w3review">Complaint Department</label></p>
                             <select class = "form-control-lg" name="department" id="a_department" required>
-                                <option value="" id = "1" disabled selected hidden>Department</option>
-                                <option value="OAP" id = "2">OAP</option>
-                                <option value="OCS" id = "3">OCS</option>
-                                <option value="RO" id = "4">RO</option>
-                              </select>
+                              {% for d in department %}
+                                {% if d[0] == dept %}
+                                  <option value="{{d[0]}}" selected>{{d[0]}}</option>
+
+                                  {% else %}
+                                    <option value="{{d[0]}}">{{d[0]}}</option>
+                                {% endif %}
+                                
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                          <div class="form-group col-md-12 mb-4">
+                            <p><label for="w3review">Complaint Status</label></p>
+                            <input type="text" class="form-control input-lg" id="c_status" name = "c_status" aria-describedby="statusHelp" value = "{{status}}" readonly>
+                          </div>
+
+                          <div class="col-md-12">
+                              <a href = "{{url_for('view_complaint')}}"><button type="button" class="btn btn-primary btn-pill mb-4">Go Back</button></a>
+                          </div>
+
+                          <button type="submit" id = "submit-btn" class="btn btn-primary btn-pill mb-4">Reassign Complaint</button>
+
                         </div>
 
-                        <div class="col-md-12">
-                            <a href = "{{url_for('view_complaint')}}"><button type="button" class="btn btn-primary btn-pill mb-4">Reassign Complaint</button></a>
-                        </div>
-
-                      </div>
+                      </form>
                     </div>
                   </div>
                 </div>

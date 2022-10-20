@@ -90,7 +90,7 @@
 
                           <div class="form-group col-md-12 mb-4">
                             <p><label for="w3review">Complaint Department</label></p>
-                            <select class = "form-control-lg" name="department" id="a_department">
+                            <select class = "form-control-lg" name="department" id="a_department" required>
                               {% for d in department %}
                                 {% if d[0] == dept %}
                                   <option value="{{d[0]}}" selected>{{d[0]}}</option>
