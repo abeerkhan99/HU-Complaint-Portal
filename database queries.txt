@@ -114,3 +114,26 @@ values('Complaint 5', 'Login is not working', '2022-05-21', 1, 'ak05419', 'aa054
 
 insert into Student(StudentID, StudentFirstName, StudentLastName, StudentEmail, StudentPassword, Batch, Student_Program)
 values ('fn05458', 'Fatima', 'Nasir', 'fn05458@st.habib.edu.pk', '12345', '2023', 1);
+
+
+create table LostFound
+(
+	PostID varchar(7) unique primary key not null,
+	PostTitle varchar(500) not null,
+	PostContent varchar(500) not null,
+	PostDate date not null,
+	PostStatus bool,
+	Post_StudentID varchar(7),
+	constraint FK_Post_Student foreign key(Post_StudentID) references Student(StudentID)
+);
+
+create table LostFoundComments
+(
+	CommentID varchar(7) unique primary key not null,
+	CommentContent varchar(800) not null,
+	CommentDate date not null,
+	Comment_PostID varchar(7),
+	Comment_StudentID varchar(7),
+	constraint FK_Comment_Student foreign key(Comment_StudentID) references Student(StudentID),
+	constraint FK_Comment_Post foreign key(Comment_PostID) references LostFound(PostID)
+);
