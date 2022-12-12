@@ -15,6 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import 'forgot_pass.dart';
+import 'home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -356,7 +357,7 @@ class _HomePageWidgetState extends State<Login> with TickerProviderStateMixin {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const ForgotPass()),
+        MaterialPageRoute(builder: (context) => const Home()),
       );
       
 

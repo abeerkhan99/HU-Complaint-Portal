@@ -34,16 +34,20 @@ class HUCPController{
         {
             $this->ResetPass();
         }
+        if($this->method == 'getprogram')
+        {
+            $this->GetProgram();
+        }
     }
 
     public function VerifyLogin()
     {
 
-        // $email = $_POST["email"];
-        // $pass = $_POST["password"];
+        $email = $_POST["email"];
+        $pass = $_POST["password"];
 
-        $email = "ak05419@st.habib.edu.pk";
-        $pass = "12345";
+        // $email = "ak05419@st.habib.edu.pk";
+        // $pass = "12345";
 
         $e = $p = $sid = $sf = $sl = $sp = $sb = null;
 
@@ -126,6 +130,19 @@ class HUCPController{
             echo json_encode($response);
         }
         pg_close($this->conn);    
+    }
+
+    public function GetProgram()
+    {
+        $items = [];
+        $result = pg_query($this->conn, "SELECT programname FROM Program");
+        while($row = pg_fetch_row($result))
+        {
+            $items[] = $row;
+        }
+        $response["message"] = $items;
+
+        echo json_encode($response);
     }
 
 }

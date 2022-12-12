@@ -57,7 +57,10 @@ dependencies:
   timeago: 3.2.2
   url_launcher: 6.1.5
   flutter_session_manager: ^1.0.3
-
+  flutter_spinkit: 5.1.0
+  table_calendar: 3.0.5
+  fl_chart: 0.50.6
+  styled_divider: 1.0.1
 
 dev_dependencies:
   flutter_test:

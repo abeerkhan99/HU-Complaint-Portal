@@ -247,7 +247,7 @@ class _HomePageWidgetState extends State<ResetPassword>
                                 // send data to api to get checked
                                 if(emailTextController!.text != passwordTextController!.text)
                                 {
-                                  final snackBar = SnackBar(content: const Text('ID and Email not match'));
+                                  final snackBar = SnackBar(content: const Text('Passwords do not match'));
                                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                                 }
