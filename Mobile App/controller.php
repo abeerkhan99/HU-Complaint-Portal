@@ -38,6 +38,26 @@ class HUCPController{
         {
             $this->GetProgram();
         }
+        if($this->method == 'getcomplaint')
+        {
+            $this->GetComplaints();
+        }
+        if($this->method == 'getdepartment')
+        {
+            $this->GetDepartment();
+        }
+        if($this->method == 'getstatus')
+        {
+            $this->GetStatus();
+        }
+        if($this->method == 'updatecomplaint')
+        {
+            $this->UpdateComplaint();
+        }
+        if($this->method == 'updateprofile')
+        {
+            $this->UpdateProfile();
+        }
     }
 
     public function VerifyLogin()
@@ -143,6 +163,122 @@ class HUCPController{
         $response["message"] = $items;
 
         echo json_encode($response);
+    }
+    
+    public function GetComplaints()
+    {
+        $id = $_POST["studentid"];
+        
+        $result = pg_query($this->conn, "SELECT complaintid, complainttitle, complaintcontent, complaintdate, resolvedate, departmentname, statusname FROM Complaint, Department, Status WHERE complaint_studentid = '$id' AND departmentid = complaint_departmentid AND statusid = complaint_status");
+        while($row = pg_fetch_row($result))
+        {
+            $items[] = [$row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6]];
+        }
+        $response["message"] = $items;
+        echo json_encode($response);
+    }
+
+    public function GetDepartment()
+    {
+        $items = [];
+        $result = pg_query($this->conn, "SELECT departmentname FROM Department");
+        while($row = pg_fetch_row($result))
+        {
+            $items[] = $row;
+        }
+        $response["message"] = $items;
+
+        echo json_encode($response);
+
+    }
+
+    public function GetStatus()
+    {
+        $items = [];
+        $result = pg_query($this->conn, "SELECT statusname FROM Status");
+        while($row = pg_fetch_row($result))
+        {
+            $items[] = $row;
+        }
+        $response["message"] = $items;
+
+        echo json_encode($response);
+
+    }
+
+    public function UpdateComplaint()
+    {
+        $id = $_POST["id"];
+        $title = $_POST["title"];
+        $content = $_POST["content"];
+        $status = $_POST["status"];
+
+        $get_status_id = pg_query($this->conn, "SELECT statusid FROM status WHERE statusname = '$status'");
+        $status_id = pg_fetch_row($get_status_id);
+
+        $result = pg_query($this->conn, "UPDATE Complaint SET complainttitle = '$title' AND complaintcontent = '$content' AND complaintstatus = '$status_id' WHERE complaintid = '$id'");
+        if (!$result)
+        {
+            $response["message"] = "false";
+            echo json_encode($response);
+        }
+        else
+        {
+            $response["message"] = "true";
+            echo json_encode($response);
+        }
+        pg_close($this->conn);
+    }
+
+    public function UpdateProfile()
+    {
+        $id = $_POST["id"];
+        $fname = $_POST["fname"];
+        $lname = $_POST["lname"];
+        $email = $_POST["email"];
+        $program = $_POST["program"];
+        $batch = $_POST["batch"];
+        $pass = $_POST["password"];
+
+        // get program id
+        $result = pg_query($this->conn, "SELECT programname from Program WHERE programid = '$program'");
+        $get_program_id = pg_fetch_row($result);
+
+
+        if ($pass == "")
+        {
+            // update the rest 
+            $result = pg_query($this->conn, "UPDATE Student SET studentfirstname = '$fname' AND studentlastname = '$lname' AND studentemail = '$email' AND studentprogram = '$get_program_id' ");
+            if (!$result)
+            {
+                $response["message"] = "false";
+                echo json_encode($response);
+            }
+            else
+            {
+                $response["message"] = "true";
+                echo json_encode($response);
+            }
+
+
+        }
+        else
+        {
+            $result = pg_query($this->conn, "UPDATE Student SET studentfirstname = '$fname' AND studentlastname = '$lname' AND studentemail = '$email' AND studentprogram = '$get_program_id' AND studentpassword = '$pass' ");
+            if (!$result)
+            {
+                $response["message"] = "false";
+                echo json_encode($response);
+            }
+            else
+            {
+                $response["message"] = "true";
+                echo json_encode($response);
+            }
+        }
+        pg_close($this->conn);
+
+
     }
 
 }
