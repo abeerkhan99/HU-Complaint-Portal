@@ -1,4 +1,4 @@
-import 'package:complaint_portal/edit-profile.dart';
+
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../src/flutter_flow/flutter_flow_icon_button.dart';
@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'login.dart';
+import 'edit-profile.dart';
 import 'home.dart';
 
 class Viewprofile extends StatefulWidget {
@@ -23,8 +24,8 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
   TextEditingController? textController2;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String? sname;
-  String? semail;
+  String sname = "";
+  String semail = "";
 
   @override
   void initState() {
@@ -52,9 +53,15 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
     setState(() {
       textController1!.text = program.toString();
       textController2!.text = batch.toString();
+      // sname = fname.toString() + " " + lname.toString();
+      // semail = email.toString();
+
       sname = fname.toString() + " " + lname.toString();
       semail = email.toString();
     });
+
+    print(sname);
+    print(semail);
   }
 
   @override
@@ -147,7 +154,7 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              sname!,
+                              sname,
                               style:
                                   FlutterFlowTheme.of(context).title3.override(
                                         fontFamily: 'Urbanist',
@@ -160,7 +167,7 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                               child: Text(
-                                semail!,
+                                semail,
                                 style: FlutterFlowTheme.of(context)
                                     .bodyText2
                                     .override(

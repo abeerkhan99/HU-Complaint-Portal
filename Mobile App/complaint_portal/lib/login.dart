@@ -16,6 +16,8 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import 'forgot_pass.dart';
 import 'home.dart';
+import 'edit-profile.dart';
+import 'view-complaint.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -207,65 +209,65 @@ class _HomePageWidgetState extends State<Login> with TickerProviderStateMixin {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                               child: TextFormField(
-                                  controller: textController2,
-                                  autofocus: true,
-                                  obscureText: !passwordVisibility,
-                                  decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodyText2,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
+                                controller: textController2,
+                                autofocus: true,
+                                obscureText: !passwordVisibility,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  hintStyle:
+                                      FlutterFlowTheme.of(context).bodyText2,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      width: 2,
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      width: 2,
                                     ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFF50D36),
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFF50D36),
+                                      width: 2,
                                     ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFF50D36),
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFF50D36),
+                                      width: 2,
                                     ),
-                                    suffixIcon: InkWell(
-                                      onTap: () => setState(
-                                        () => passwordVisibility =
-                                            !passwordVisibility,
-                                      ),
-                                      focusNode: FocusNode(skipTraversal: true),
-                                      child: Icon(
-                                        passwordVisibility
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: Color(0xFF757575),
-                                        size: 15,
-                                      ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  suffixIcon: InkWell(
+                                    onTap: () => setState(
+                                      () => passwordVisibility =
+                                          !passwordVisibility,
+                                    ),
+                                    focusNode: FocusNode(skipTraversal: true),
+                                    child: Icon(
+                                      passwordVisibility
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      color: Color(0xFF757575),
+                                      size: 15,
                                     ),
                                   ),
-                                  style: FlutterFlowTheme.of(context).bodyText1,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Please enter a password";
-                                    }
-                                  },
-                                  ),
+                                ),
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Please enter a password";
+                                  }
+                                },
+                              ),
                             ),
                             Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -345,7 +347,6 @@ class _HomePageWidgetState extends State<Login> with TickerProviderStateMixin {
     var message = data["message"];
     print(message);
     if (message == "true") {
-
       var sessionManager = SessionManager();
       await sessionManager.set("id", data["id"]);
       await sessionManager.set("fname", data["fname"]);
@@ -359,8 +360,6 @@ class _HomePageWidgetState extends State<Login> with TickerProviderStateMixin {
         context,
         MaterialPageRoute(builder: (context) => const Home()),
       );
-      
-
     } else {
       final snackBar =
           SnackBar(content: const Text('Incorrect email or password'));

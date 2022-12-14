@@ -1,6 +1,6 @@
 {
-    "name": "complaint_portal",
-    "short_name": "complaint_portal",
+    "name": "hu_complaint_portal",
+    "short_name": "hu_complaint_portal",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -17,6 +17,8 @@ abstract class FlutterFlowTheme {
 
   get grayIcon => null;
 
+  get gray600 => null;
+
   static Future initialize() async =>
       _prefs = await SharedPreferences.getInstance();
   static ThemeMode get themeMode {

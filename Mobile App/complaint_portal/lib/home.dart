@@ -1,11 +1,19 @@
+import 'dart:convert';
+import 'dart:ffi';
+
+import 'package:hu_complaint_portal/src/flutter_flow/flutter_flow.dart';
+
 import '../src/flutter_flow/flutter_flow_theme.dart';
 import '../src/flutter_flow/flutter_flow_util.dart';
 import 'package:styled_divider/styled_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:http/http.dart' as http;
 import 'login.dart';
 import 'view-profile.dart';
+import 'view-complaint.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,6 +24,40 @@ class Home extends StatefulWidget {
 
 class _IdkkWidgetState extends State<Home> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  int boxes = 0;
+  var complaint;
+
+  @override
+  void initState() {
+    super.initState();
+    getComplaints();
+  }
+
+  getComplaints() async {
+    dynamic id = await SessionManager().get("id");
+
+    String APIURL = "http://10.0.2.2/index.php/hucp/getcomplaint";
+
+    var json_body = {'studentid': id.toString()};
+
+    http.Response response =
+        await http.post(Uri.parse(APIURL), body: json_body);
+
+    var data = jsonDecode(response.body);
+
+    var message = data["message"];
+    boxes = message.length;
+
+    // print(boxes);
+
+    setState(() {
+      boxes = message.length;
+      complaint = data["message"];
+    });
+
+    print(boxes);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,14 +130,20 @@ class _IdkkWidgetState extends State<Home> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             new IconButton(
-                              icon: new Icon(Icons.arrow_forward_ios_rounded,
-                              color:
-                                  FlutterFlowTheme.of(context).darkBackground,
-                              size: 24,),
+                              icon: new Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color:
+                                    FlutterFlowTheme.of(context).darkBackground,
+                                size: 24,
+                              ),
                               onPressed: () {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Viewprofile()),);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Viewprofile()),
+                                );
                               },
-                              
                             ),
                           ],
                         ),
@@ -196,7 +244,10 @@ class _IdkkWidgetState extends State<Home> {
                                                   'userName',
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .subtitle1,
+                                                      .subtitle1
+                                                      .override(
+                                                        fontFamily: 'Work Sans',
+                                                      ),
                                                 ),
                                               ),
                                               Padding(
@@ -227,7 +278,11 @@ class _IdkkWidgetState extends State<Home> {
                                                     'We cleaned up a lot of visual clutter. There are fewer gray backgrounds and unnecessary divider lines. We also increased space to make text easier to read.',
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText2,
+                                                        .bodyText2
+                                                        .override(
+                                                          fontFamily:
+                                                              'Work Sans',
+                                                        ),
                                                   ),
                                                 ),
                                               ),
@@ -339,7 +394,10 @@ class _IdkkWidgetState extends State<Home> {
                                                   'userName',
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .subtitle1,
+                                                      .subtitle1
+                                                      .override(
+                                                        fontFamily: 'Work Sans',
+                                                      ),
                                                 ),
                                               ),
                                               Padding(
@@ -370,7 +428,11 @@ class _IdkkWidgetState extends State<Home> {
                                                     'We cleaned up a lot of visual clutter. There are fewer gray backgrounds and unnecessary divider lines. We also increased space to make text easier to read.',
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText2,
+                                                        .bodyText2
+                                                        .override(
+                                                          fontFamily:
+                                                              'Work Sans',
+                                                        ),
                                                   ),
                                                 ),
                                               ),
@@ -435,6 +497,9 @@ class _IdkkWidgetState extends State<Home> {
                             ),
                           ),
                         ),
+
+                        // complaint tab
+
                         Container(
                           width: 100,
                           height: 100,
@@ -442,141 +507,195 @@ class _IdkkWidgetState extends State<Home> {
                             color:
                                 FlutterFlowTheme.of(context).primaryBackground,
                           ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 6, 0, 6),
-                                child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.96,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 4,
-                                        color: Color(0x2E000000),
-                                        offset: Offset(0, 2),
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Padding(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                for (int i = 0;
+                                    i < boxes;
+                                    i++) //add for loop stuff here
+                                  Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 1, 0, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 8, 12, 0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(12, 0, 0, 0),
-                                                child: Text(
-                                                  'userName',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .subtitle1,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(4, 0, 0, 0),
-                                                child: Text(
-                                                  '2h',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText2,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  12, 4, 12, 0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Expanded(
-                                                child: Padding(
+                                        0, 6, 0, 0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.96,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 4,
+                                            color: Color(0x2E000000),
+                                            offset: Offset(0, 2),
+                                          )
+                                        ],
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 8, 12, 0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 0, 0, 8),
+                                                      .fromSTEB(12, 0, 0, 0),
                                                   child: Text(
-                                                    'We cleaned up a lot of visual clutter. There are fewer gray backgrounds and unnecessary divider lines. We also increased space to make text easier to read.',
+                                                    complaint[i][6].toString(),
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyText2,
+                                                        .subtitle1
+                                                        .override(
+                                                          fontFamily:
+                                                              'Work Sans',
+                                                        ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Divider(
-                                          height: 3,
-                                          thickness: 1,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBackground,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16, 0, 16, 4),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Icon(
-                                                        Icons
-                                                            .mode_comment_outlined,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .grayIcon,
-                                                        size: 24,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    4, 0, 0, 0),
-                                                        child: Text(
-                                                          '4',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText2,
-                                                        ),
-                                                      ),
-                                                    ],
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    12, 4, 12, 0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 0, 8),
+                                                    child: Text(
+                                                      complaint[i][1]
+                                                          .toString(),
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Work Sans',
+                                                              ),
+                                                    ),
                                                   ),
-                                                ],
-                                              ),
-                                            ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          Divider(
+                                            height: 3,
+                                            thickness: 1,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryBackground,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    16, 0, 16, 4),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        FFButtonWidget(
+                                                          onPressed: () {
+                                                            SendComplaint(
+                                                                complaint[i]);
+                                                          },
+                                                          text: 'View',
+                                                          options:
+                                                              FFButtonOptions(
+                                                            width: 130,
+                                                            height: 40,
+                                                            color: Color(
+                                                                0xFF821C8B),
+                                                            textStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .subtitle2
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Work Sans',
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                    ),
+                                                            borderSide:
+                                                                BorderSide(
+                                                              color: Colors
+                                                                  .transparent,
+                                                              width: 1,
+                                                            ),
+                                                            // borderRadius: BorderRadius.circular(8),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Visibility(
+                                                  visible: (complaint[i][6] ==
+                                                      'Unresolved'),
+                                                  child: FFButtonWidget(
+                                                    onPressed: () {
+                                                      // DELETE THAT SHIT
+                                                      // DeleteComplaint();
+                                                    },
+                                                    text: 'Delete',
+                                                    options: FFButtonOptions(
+                                                      width: 130,
+                                                      height: 40,
+                                                      color: Color(0xFFEF3962),
+                                                      textStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .subtitle2
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Work Sans',
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Colors.transparent,
+                                                        width: 1,
+                                                      ),
+                                                      // borderRadius: BorderRadius.circular(8),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ],
+                                //END
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -588,6 +707,25 @@ class _IdkkWidgetState extends State<Home> {
           ),
         ],
       ),
+    );
+  }
+
+  void SendComplaint(complaint) async {
+    var sessionManager = SessionManager();
+    await sessionManager.set("id", complaint[0]);
+    await sessionManager.set("title", complaint[1]);
+    await sessionManager.set("content", complaint[2]);
+    await sessionManager.set("ldate", complaint[3]);
+    await sessionManager.set("department", complaint[5]);
+    await sessionManager.set("status", complaint[6]);
+
+    if (complaint[4] == null) {
+      await sessionManager.set("rdate", "");
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const ViewComplaint()),
     );
   }
 }

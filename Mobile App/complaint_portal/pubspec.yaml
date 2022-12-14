@@ -1,4 +1,4 @@
-name: complaint_portal
+name: hu_complaint_portal
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -32,8 +32,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
   postgres: ^2.4.3
   http: ^0.13.0
   mask_text_input_formatter: 2.4.0
@@ -61,6 +63,7 @@ dependencies:
   table_calendar: 3.0.5
   fl_chart: 0.50.6
   styled_divider: 1.0.1
+
 
 dev_dependencies:
   flutter_test:

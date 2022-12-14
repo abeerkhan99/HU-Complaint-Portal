@@ -18,8 +18,8 @@ import 'package:http/http.dart' as http;
 import 'home.dart';
 import 'login.dart';
 
-class EditProfile extends StatefulWidget {
-  const EditProfile({
+class ViewComplaint extends StatefulWidget {
+  const ViewComplaint({
     Key? key,
   }) : super(key: key);
 
@@ -27,14 +27,14 @@ class EditProfile extends StatefulWidget {
   _EditProfileWidgetState createState() => _EditProfileWidgetState();
 }
 
-class _EditProfileWidgetState extends State<EditProfile> {
+class _EditProfileWidgetState extends State<ViewComplaint> {
   String? dropDownValue;
-  TextEditingController? yourAgeController1;
-  TextEditingController? yourEmailController;
-  TextEditingController? yourNameController;
-  TextEditingController? yourAilmentsController;
-  int countControllerValue = 0;
-  TextEditingController? yourAgeController2;
+  TextEditingController? textController1;
+  TextEditingController? textController2;
+  TextEditingController? textController3;
+  TextEditingController? textController4;
+  TextEditingController? textController5;
+  TextEditingController? textController6;
 
   late bool yourAgeVisibility1;
   TextEditingController? yourAgeController3;
@@ -47,44 +47,51 @@ class _EditProfileWidgetState extends State<EditProfile> {
 
   final DropDownList = <String>[];
 
+  var i;
+  var t;
+  var c;
+  var ld;
+  var rd;
+  var d;
+  var s;
+
   @override
   void initState() {
     super.initState();
-    yourAgeController1 = TextEditingController(text: '');
-    yourEmailController = TextEditingController(text: '');
-    yourNameController = TextEditingController(text: '');
-    yourAilmentsController = TextEditingController(text: '');
-    yourAgeController2 = TextEditingController(text: '');
-    yourAgeVisibility1 = false;
-    yourAgeController3 = TextEditingController(text: '');
-    yourAgeVisibility2 = false;
-    getSessionValues();
+    textController1 = TextEditingController(text: '');
+    textController2 = TextEditingController(text: '');
+    textController3 = TextEditingController(text: '');
+    textController4 = TextEditingController(text: '');
+    textController5 = TextEditingController(text: '');
+    textController6 = TextEditingController(text: '');
+    GetComplaintDetails();
   }
 
   @override
   void dispose() {
-    yourAgeController1?.dispose();
-    yourEmailController?.dispose();
-    yourNameController?.dispose();
-    yourAilmentsController?.dispose();
-    yourAgeController2?.dispose();
-    yourAgeController3?.dispose();
+    textController1?.dispose();
+    textController2?.dispose();
+    textController3?.dispose();
+    textController4?.dispose();
+    textController5?.dispose();
     super.dispose();
   }
 
-  getSessionValues() async {
+  GetComplaintDetails() async {
     dynamic id = await SessionManager().get("id");
-    dynamic fname = await SessionManager().get("fname");
-    dynamic lname = await SessionManager().get("lname");
-    dynamic email = await SessionManager().get("email");
-    dynamic program = await SessionManager().get("program");
-    dynamic batch = await SessionManager().get("batch");
+    dynamic title = await SessionManager().get("title");
+    dynamic content = await SessionManager().get("content");
+    dynamic ldate = await SessionManager().get("ldate");
+    dynamic rdate = await SessionManager().get("rdate");
+    dynamic department = await SessionManager().get("department");
+    dynamic status = await SessionManager().get("status");
 
-    String APIURL = "http://10.0.2.2/index.php/hucp/getprogram";
+    String APIURL = "http://10.0.2.2/index.php/hucp/getdepartment";
     http.Response response = await http.get(Uri.parse(APIURL));
 
     var data = jsonDecode(response.body);
-    var message = data["message"]; //["CS"],["EE"],["SDP"],["CND"]]
+    var message = data["message"];
+    print(message);
 
     for (var i = 0; i < message.length; i++) {
       DropDownList.add(message[i][0].toString());
@@ -93,13 +100,24 @@ class _EditProfileWidgetState extends State<EditProfile> {
     print(DropDownList);
 
     setState(() {
-      yourAgeController1!.text = id.toString();
-      yourEmailController!.text = lname.toString();
-      yourNameController!.text = fname.toString();
-      yourAilmentsController!.text = email.toString();
+      textController1!.text = title.toString();
+      textController2!.text = content.toString();
+      textController3!.text = ldate.toString();
+      textController4!.text = rdate.toString();
+      textController5!.text = status.toString();
+      textController6!.text = department.toString();
+      dropDownValue = department.toString();
 
-      dropDownValue = program.toString();
-      countControllerValue = batch;
+      t = title.toString();
+      c = content.toString();
+      d = department.toString();
+      s = status.toString();
+      i = id.toString();
+
+      print(t);
+      print(c);
+      print(d);
+      print(s);
     });
   }
 
@@ -123,7 +141,7 @@ class _EditProfileWidgetState extends State<EditProfile> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const Viewprofile()),
+              MaterialPageRoute(builder: (context) => const Home()),
             );
           },
         ),
@@ -152,15 +170,16 @@ class _EditProfileWidgetState extends State<EditProfile> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                       child: TextFormField(
-                        controller: yourNameController,
+                        controller: textController1,
                         onChanged: (_) => EasyDebounce.debounce(
-                          'yourNameController',
+                          'textController1',
                           Duration(milliseconds: 2000),
                           () => setState(() {}),
                         ),
                         obscureText: false,
+                        readOnly: (s != "Unresolved"),
                         decoration: InputDecoration(
-                          labelText: 'First Name',
+                          labelText: 'Complaint Title',
                           labelStyle: FlutterFlowTheme.of(context).bodyText2,
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
@@ -196,18 +215,22 @@ class _EditProfileWidgetState extends State<EditProfile> {
                               FlutterFlowTheme.of(context).primaryBackground,
                           contentPadding:
                               EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                          suffixIcon: yourNameController!.text.isNotEmpty
+                          suffixIcon: textController1!.text.isNotEmpty
                               ? InkWell(
                                   onTap: () async {
-                                    yourNameController?.clear();
-                                    setState(() {});
+                                    if (s == "Unresolved") {
+                                      textController1?.clear();
+                                      setState(() {});
+                                    }
                                   },
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Color(0xFF757575),
-                                    size: 15,
-                                  ),
-                                )
+                                  child: Visibility(
+                                    visible: (s == "Unresolved"),
+                                    child: Icon(
+                                      Icons.clear,
+                                      color: Color(0xFF757575),
+                                      size: 15,
+                                    ),
+                                  ))
                               : null,
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1.override(
@@ -216,7 +239,7 @@ class _EditProfileWidgetState extends State<EditProfile> {
                         validator: (value) {
                           // check if field is empty
                           if (value!.isEmpty) {
-                            return "Please enter a first name";
+                            return "Please enter a complaint title";
                           }
                         },
                       ),
@@ -224,15 +247,16 @@ class _EditProfileWidgetState extends State<EditProfile> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                       child: TextFormField(
-                        controller: yourEmailController,
+                        controller: textController2,
                         onChanged: (_) => EasyDebounce.debounce(
-                          'yourEmailController',
+                          'textController2',
                           Duration(milliseconds: 2000),
                           () => setState(() {}),
                         ),
                         obscureText: false,
+                        readOnly: (s != "Unresolved"),
                         decoration: InputDecoration(
-                          labelText: 'Last Name',
+                          labelText: 'Description',
                           labelStyle: FlutterFlowTheme.of(context).bodyText2,
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
@@ -268,41 +292,47 @@ class _EditProfileWidgetState extends State<EditProfile> {
                               FlutterFlowTheme.of(context).primaryBackground,
                           contentPadding:
                               EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                          suffixIcon: yourEmailController!.text.isNotEmpty
+                          suffixIcon: textController2!.text.isNotEmpty
                               ? InkWell(
                                   onTap: () async {
-                                    yourEmailController?.clear();
-                                    setState(() {});
+                                    if (s == "Unresolved") {
+                                      textController2?.clear();
+                                      setState(() {});
+                                    }
                                   },
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Color(0xFF757575),
-                                    size: 15,
-                                  ),
-                                )
+                                  child: Visibility(
+                                    visible: (s == "Unresolved"),
+                                    child: Icon(
+                                      Icons.clear,
+                                      color: Color(0xFF757575),
+                                      size: 15,
+                                    ),
+                                  ))
                               : null,
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1,
                         validator: (value) {
                           // check if field is empty
                           if (value!.isEmpty) {
-                            return "Please enter a last name";
+                            return "Please enter a description for your complaint";
                           }
                         },
+                        maxLines: 6,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                       child: TextFormField(
-                        controller: yourAgeController1,
+                        controller: textController3,
                         onChanged: (_) => EasyDebounce.debounce(
-                          'yourAgeController1',
+                          'textController3',
                           Duration(milliseconds: 2000),
                           () => setState(() {}),
                         ),
                         obscureText: false,
+                        readOnly: true,
                         decoration: InputDecoration(
-                          labelText: 'StudentID',
+                          labelText: 'Date Lodged',
                           labelStyle: FlutterFlowTheme.of(context).bodyText2,
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
@@ -338,40 +368,25 @@ class _EditProfileWidgetState extends State<EditProfile> {
                               FlutterFlowTheme.of(context).primaryBackground,
                           contentPadding:
                               EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                          suffixIcon: yourAgeController1!.text.isNotEmpty
-                              ? InkWell(
-                                  onTap: () async {
-                                    yourAgeController1?.clear();
-                                    setState(() {});
-                                  },
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Color(0xFF757575),
-                                    size: 15,
-                                  ),
-                                )
-                              : null,
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Work Sans',
                             ),
-                        inputFormatters: [
-                          MaskTextInputFormatter(mask: 'AA#####')
-                        ],
                       ),
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                       child: TextFormField(
-                        controller: yourAilmentsController,
+                        controller: textController4,
                         onChanged: (_) => EasyDebounce.debounce(
-                          'yourAilmentsController',
+                          'textController4',
                           Duration(milliseconds: 2000),
                           () => setState(() {}),
                         ),
                         obscureText: false,
+                        readOnly: true,
                         decoration: InputDecoration(
-                          labelText: 'Email',
+                          labelText: 'Date Resolved',
                           labelStyle: FlutterFlowTheme.of(context).bodyText2,
                           hintStyle: FlutterFlowTheme.of(context).bodyText2,
                           enabledBorder: OutlineInputBorder(
@@ -407,285 +422,185 @@ class _EditProfileWidgetState extends State<EditProfile> {
                               FlutterFlowTheme.of(context).primaryBackground,
                           contentPadding:
                               EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                          suffixIcon: yourAilmentsController!.text.isNotEmpty
-                              ? InkWell(
-                                  onTap: () async {
-                                    yourAilmentsController?.clear();
-                                    setState(() {});
-                                  },
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Color(0xFF757575),
-                                    size: 15,
-                                  ),
-                                )
-                              : null,
+                        ),
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Work Sans',
+                            ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+                      child: TextFormField(
+                        controller: textController5,
+                        onChanged: (_) => EasyDebounce.debounce(
+                          'textController5',
+                          Duration(milliseconds: 2000),
+                          () => setState(() {}),
+                        ),
+                        obscureText: false,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Current Status',
+                          labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                          hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFFF50D36),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFFF50D36),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor:
+                              FlutterFlowTheme.of(context).primaryBackground,
+                          contentPadding:
+                              EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1,
                         keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          // check if field is empty
-                          if (value!.isEmpty) {
-                            return "Please enter an email address";
-                          }
-                          // check if email format is correct
-                          else if (!RegExp("^[a-zA-Z0-9+_.-]+@st.habib.edu.pk")
-                              .hasMatch(value)) {
-                            return "Incorrect email format";
-                          }
-                        },
                       ),
                     ),
-                    Align(
-                      alignment: AlignmentDirectional(-0.77, 0),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
-                        child: Text(
-                          'Batch',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyText1
-                              .override(
-                                fontFamily: 'Work Sans',
-                                color: FlutterFlowTheme.of(context).grayDark,
-                                fontSize: 11,
-                              ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 320,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF1F4F8),
-                        borderRadius: BorderRadius.circular(25),
-                        shape: BoxShape.rectangle,
-                        border: Border.all(
-                          color: Color(0xFFF1F4F8),
-                          width: 0,
-                        ),
-                      ),
-                      child: FlutterFlowCountController(
-                        decrementIconBuilder: (enabled) => FaIcon(
-                          FontAwesomeIcons.minus,
-                          color: enabled
-                              ? FlutterFlowTheme.of(context).darkBackground
-                              : Color(0xFFEEEEEE),
-                          size: 20,
-                        ),
-                        incrementIconBuilder: (enabled) => FaIcon(
-                          FontAwesomeIcons.plus,
-                          color:
-                              enabled ? Color(0xFF821C8B) : Color(0xFFEEEEEE),
-                          size: 20,
-                        ),
-                        countBuilder: (count) => Text(
-                          count.toString(),
-                          style: GoogleFonts.getFont(
-                            'Roboto',
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                        count: countControllerValue!, // CHANGE HERE
-                        updateCount: (count) =>
-                            setState(() => countControllerValue = count),
-                        stepSize: 1,
-                        minimum: 2018,
-                        maximum: 2026,
-                      ),
-                    ),
-                    Align(
-                      alignment: AlignmentDirectional(-0.77, 0),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                        child: Text(
-                          'Program',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyText1
-                              .override(
-                                fontFamily: 'Work Sans',
-                                color: FlutterFlowTheme.of(context).grayDark,
-                                fontSize: 11,
-                              ),
-                        ),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: AlignmentDirectional(-0.77, 0),
+                    //   child: Padding(
+                    //     padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                    //     child: Text(
+                    //       'Department',
+                    //       style: FlutterFlowTheme.of(context)
+                    //           .bodyText1
+                    //           .override(
+                    //             fontFamily: 'Work Sans',
+                    //             color: FlutterFlowTheme.of(context).grayDark,
+                    //             fontSize: 11,
+                    //           ),
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
-                      child: FlutterFlowDropDown(
-                        initialOption: dropDownValue,
-                        options: DropDownList, //GET VALUES FROM API
-                        onChanged: (val) => setState(() => dropDownValue = val),
-                        width: 320,
-                        height: 45,
-                        textStyle:
-                            FlutterFlowTheme.of(context).bodyText1.override(
-                                  fontFamily: 'Work Sans',
-                                  color: Colors.black,
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
+                        child: Column(
+                          children: [
+                            Visibility(
+                              visible: (s != "Unresolved"),
+                              child: TextFormField(
+                                controller: textController6,
+                                onChanged: (_) => EasyDebounce.debounce(
+                                  'textController6',
+                                  Duration(milliseconds: 2000),
+                                  () => setState(() {}),
                                 ),
-                        hintText: 'Select Program',
-                        fillColor: Color(0xFFF1F4F8),
-                        elevation: 2,
-                        borderColor: Colors.transparent,
-                        borderWidth: 2,
-                        borderRadius: 15,
-                        margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
-                        hidesUnderline: true,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                      child: TextFormField(
-                        controller: yourAgeController2,
-                        obscureText: !yourAgeVisibility1,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          labelStyle: FlutterFlowTheme.of(context).bodyText2,
-                          hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1,
+                                obscureText: false,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  labelText: 'Current Status',
+                                  labelStyle:
+                                      FlutterFlowTheme.of(context).bodyText2,
+                                  hintStyle:
+                                      FlutterFlowTheme.of(context).bodyText2,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFF50D36),
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFF50D36),
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  filled: true,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  contentPadding:
+                                      EdgeInsetsDirectional.fromSTEB(
+                                          20, 24, 20, 24),
+                                ),
+                                style: FlutterFlowTheme.of(context).bodyText1,
+                                keyboardType: TextInputType.emailAddress,
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFF50D36),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFF50D36),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          contentPadding:
-                              EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                          suffixIcon: InkWell(
-                            onTap: () => setState(
-                              () => yourAgeVisibility1 = !yourAgeVisibility1,
-                            ),
-                            focusNode: FocusNode(skipTraversal: true),
-                            child: Icon(
-                              yourAgeVisibility1
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                              color: Color(0xFF757575),
-                              size: 15,
-                            ),
-                          ),
-                        ),
-                        style: FlutterFlowTheme.of(context).bodyText1.override(
-                              fontFamily: 'Work Sans',
-                            ),
-                        validator: (value) {
-                          // check if field is empty
-                          if (value!.isEmpty &&
-                              yourAgeController3!.text.isNotEmpty) {
-                            return "Please enter a password";
-                          }
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                      child: TextFormField(
-                        controller: yourAgeController3,
-                        obscureText: !yourAgeVisibility2,
-                        decoration: InputDecoration(
-                          labelText: 'Confirm Password',
-                          labelStyle: FlutterFlowTheme.of(context).bodyText2,
-                          hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFF50D36),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFF50D36),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          contentPadding:
-                              EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                          suffixIcon: InkWell(
-                            onTap: () => setState(
-                              () => yourAgeVisibility2 = !yourAgeVisibility2,
-                            ),
-                            focusNode: FocusNode(skipTraversal: true),
-                            child: Icon(
-                              yourAgeVisibility2
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                              color: Color(0xFF757575),
-                              size: 15,
-                            ),
-                          ),
-                        ),
-                        style: FlutterFlowTheme.of(context).bodyText1.override(
-                              fontFamily: 'Work Sans',
-                            ),
-                        validator: (value) {
-                          // check if field is empty
-                          if (value!.isEmpty &&
-                              yourAgeController2!.text.isNotEmpty) {
-                            return "Please enter a password";
-                          }
-                        },
-                      ),
-                    ),
+                            Visibility(
+                              visible: (s == "Unresolved"),
+                              child: FlutterFlowDropDown(
+                                initialOption: dropDownValue,
+                                options: DropDownList, //GET VALUES FROM API
+                                onChanged: (val) =>
+                                    setState(() => dropDownValue = val),
+                                width: 320,
+                                height: 45,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Work Sans',
+                                      color: Colors.black,
+                                    ),
+                                hintText: sprogram,
+                                fillColor: Color(0xFFF1F4F8),
+                                elevation: 2,
+                                borderColor: Colors.transparent,
+                                borderWidth: 2,
+                                borderRadius: 15,
+                                margin: EdgeInsetsDirectional.fromSTEB(
+                                    12, 4, 12, 4),
+                                hidesUnderline: true,
+                              ),
+                            )
+                          ],
+                        )),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 24),
                       child: FFButtonWidget(
                         onPressed: () {
                           if (scaffoldKey.currentState!.validate()) {
-                            // if fields are not empty
-                            // send data to api to get checked
-                            if (yourAgeController2!.text !=
-                                yourAgeController3!.text) {
+                            if (textController1!.text == t.toString() &&
+                                textController2!.text == c.toString() &&
+                                dropDownValue == d.toString()) {
                               final snackBar = SnackBar(
-                                  content:
-                                      const Text('Passwords do not match'));
+                                  content: const Text(
+                                      "You haven't changed any information!"));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
-                            } else {
-                              SendNewData();
+                            } 
+                            else {
+                              UpdateComplaint();
                             }
                           } else {
                             return;
@@ -722,22 +637,22 @@ class _EditProfileWidgetState extends State<EditProfile> {
     );
   }
 
-  Future SendNewData() async {
-    String APIURL = "http://10.0.2.2/index.php/hucp/updateprofile";
+  Future UpdateComplaint() async {
+
+    // send complaint id, complaint title, complaint description, complaint status to API
+    String APIURL = "http://10.0.2.2/index.php/hucp/updatecomplaint";
 
     var json_body = {
-      'id': yourAgeController1!.text,
-      'fname': yourEmailController!.text,
-      'lname': yourNameController!.text,
-      'email': yourAilmentsController!.text,
-      'program': dropDownValue,
-      'batch': countControllerValue,
-      'password': yourAgeController2!.text
+      'id': i,
+      'title': textController1!.text,
+      'content': textController2!.text,
+      'status': dropDownValue.toString()
     };
 
     print(json_body);
 
-    http.Response response = await http.post(Uri.parse(APIURL), body: json_body);
+    http.Response response =
+        await http.post(Uri.parse(APIURL), body: json_body);
 
     var data = jsonDecode(response.body);
     var message = data["message"];
@@ -747,11 +662,9 @@ class _EditProfileWidgetState extends State<EditProfile> {
         context,
         MaterialPageRoute(builder: (context) => const Home()),
       );
-    } 
-    else {
-      final snackBar = SnackBar(
-          content:
-              const Text('Could not update profile. Please try again later.'));
+    } else {
+      final snackBar =
+          SnackBar(content: const Text('Complaint could not be updated. Please try again.'));
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
