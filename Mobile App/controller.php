@@ -58,6 +58,18 @@ class HUCPController{
         {
             $this->UpdateProfile();
         }
+        if($this->method == 'addcomplaint')
+        {
+            $this->AddComplaint();
+        }
+        if($this->method == 'resolve')
+        {
+            $this->ResolveComplaint();
+        }
+        if($this->method == 'delete')
+        {
+            $this->DeleteComplaint();
+        }
     }
 
     public function VerifyLogin()
@@ -208,15 +220,15 @@ class HUCPController{
 
     public function UpdateComplaint()
     {
-        $id = $_POST["id"];
-        $title = $_POST["title"];
-        $content = $_POST["content"];
-        $status = $_POST["status"];
+        $id = $_POST["complaint_id"];
+        $title = $_POST["complaint_title"];
+        $content = $_POST["complaint_content"];
+        $department = $_POST["complaint_department"];
 
-        $get_status_id = pg_query($this->conn, "SELECT statusid FROM status WHERE statusname = '$status'");
-        $status_id = pg_fetch_row($get_status_id);
+        $get_dept_id = pg_query($this->conn, "SELECT departmentid FROM department WHERE departmentname = '$department'");
+        $dept_id = pg_fetch_row($get_dept_id);
 
-        $result = pg_query($this->conn, "UPDATE Complaint SET complainttitle = '$title' AND complaintcontent = '$content' AND complaintstatus = '$status_id' WHERE complaintid = '$id'");
+        $result = pg_query($this->conn, "UPDATE Complaint SET complainttitle = '$title', complaintcontent = '$content', complaint_departmentid = $dept_id[0] WHERE complaintid = '$id'");
         if (!$result)
         {
             $response["message"] = "false";
@@ -241,14 +253,15 @@ class HUCPController{
         $pass = $_POST["password"];
 
         // get program id
-        $result = pg_query($this->conn, "SELECT programname from Program WHERE programid = '$program'");
+        $result = pg_query($this->conn, "SELECT programid from Program WHERE programname = '$program'");
         $get_program_id = pg_fetch_row($result);
-
+        
 
         if ($pass == "")
         {
-            // update the rest 
-            $result = pg_query($this->conn, "UPDATE Student SET studentfirstname = '$fname' AND studentlastname = '$lname' AND studentemail = '$email' AND studentprogram = '$get_program_id' ");
+            // update the rest
+
+            $result = pg_query($this->conn, "UPDATE Student SET studentfirstname = '$fname', studentlastname = '$lname', studentemail = '$email', student_program = $get_program_id[0], batch = '$batch' WHERE studentid = '$id' ");
             if (!$result)
             {
                 $response["message"] = "false";
@@ -264,7 +277,7 @@ class HUCPController{
         }
         else
         {
-            $result = pg_query($this->conn, "UPDATE Student SET studentfirstname = '$fname' AND studentlastname = '$lname' AND studentemail = '$email' AND studentprogram = '$get_program_id' AND studentpassword = '$pass' ");
+            $result = pg_query($this->conn, "UPDATE Student SET studentfirstname = '$fname', studentlastname = '$lname', studentemail = '$email', student_program = $get_program_id[0], batch = '$batch', studentpassword = '$pass' WHERE studentid = '$id' ");
             if (!$result)
             {
                 $response["message"] = "false";
@@ -278,6 +291,74 @@ class HUCPController{
         }
         pg_close($this->conn);
 
+
+    }
+
+    public function AddComplaint()
+    {
+        $id = $_POST["id"];
+        $title = $_POST["title"];
+        $description = $_POST["description"];
+        $department = $_POST["department"];
+
+
+        // get department id
+        $result = pg_query($this->conn, "SELECT departmentid from Department WHERE departmentname = '$department'");
+        $get_department_id = pg_fetch_row($result);
+
+        $date = date("Y-m-d");
+
+        $result = pg_query($this->conn, "INSERT INTO Complaint(ComplaintTitle, ComplaintContent, ComplaintDate, Complaint_DepartmentID, Complaint_StudentID, Complaint_Status) VALUES ('$title', '$description', '$date', $get_department_id[0], '$id', 1)"); 
+        if (!$result)
+        {
+            $response["message"] = "false";
+            echo json_encode($response);
+        }
+        else
+        {
+            $response["message"] = "true";
+            echo json_encode($response);
+        }
+        pg_close($this->conn);
+
+    }
+
+    public function ResolveComplaint()
+    {
+        $complaint_id = $_POST['complaint_id'];
+        $date = date("Y-m-d");
+        $result = pg_query($this->conn, "UPDATE Complaint SET resolvedate = $date WHERE complaintid = '$complaint_id' ");
+        if (!$result)
+        {
+            $response["message"] = "false";
+            echo json_encode($response);
+        }
+        else
+        {
+            $response["message"] = "true";
+            echo json_encode($response);
+        }
+        pg_close($this->conn);
+
+    }
+
+    public function DeleteComplaint()
+    {
+        $complaintID = $_POST['complaint_id'];
+
+        // $complaint_id = 1;
+        $result = pg_query($this->conn, "DELETE FROM Complaint WHERE  complaintid = '$complaintID' ");
+        if (!$result)
+        {
+            $response["message"] = "false";
+            echo json_encode($response);
+        }
+        else
+        {
+            $response["message"] = "true";
+            echo json_encode($response);
+        }
+        pg_close($this->conn);
 
     }
 
