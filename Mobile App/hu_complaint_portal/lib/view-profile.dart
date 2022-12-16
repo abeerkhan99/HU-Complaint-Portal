@@ -83,10 +83,8 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
             size: 30,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const Home()),
-            );
+              Navigator.pop(context);
+
           },
         ),
         title: Text(
@@ -430,13 +428,16 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
                                   size: 18,
                                 ),
                                 onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const EditProfile()),
-                                  );
-                                },
+                                  Navigator.pushNamed(context, '/editprofile').then((_) {
+                                      // This block runs when you have returned back from screen 2.
+                                      setState(() {
+                                        // code here to refresh data
+                                        getSessionValues();
+                                      });
+                                  });
+
+                                  
+                                  },
                               )),
                         ),
                       ],
@@ -452,11 +453,7 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
                   children: [
                     FFButtonWidget(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Login()),
-                        );
+                        Navigator.of(context)..pop()..pop();
                       },
                       text: 'Log Out',
                       options: FFButtonOptions(

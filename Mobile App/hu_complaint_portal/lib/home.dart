@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:hu_complaint_portal/create-post.dart';
 import 'package:hu_complaint_portal/src/flutter_flow/flutter_flow.dart';
 
 import '../src/flutter_flow/flutter_flow_theme.dart';
@@ -14,6 +15,7 @@ import 'package:http/http.dart' as http;
 import 'login.dart';
 import 'view-profile.dart';
 import 'view-complaint.dart';
+import 'main.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -41,6 +43,8 @@ class _IdkkWidgetState extends State<Home> {
 
     var json_body = {'studentid': id.toString()};
 
+    print(json_body);
+
     http.Response response =
         await http.post(Uri.parse(APIURL), body: json_body);
 
@@ -49,7 +53,7 @@ class _IdkkWidgetState extends State<Home> {
     var message = data["message"];
     boxes = message.length;
 
-    // print(boxes);
+    print(boxes);
 
     setState(() {
       boxes = message.length;
@@ -66,7 +70,13 @@ class _IdkkWidgetState extends State<Home> {
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('FloatingActionButton pressed ...');
+          Navigator.pushNamed(context, '/createpost').then((_) {
+            // This block runs when you have returned back from screen 2.
+            setState(() {
+              // code here to refresh data
+              getComplaints();
+            });
+          });
         },
         backgroundColor: Color(0xFF821C8B),
         elevation: 8,
@@ -137,12 +147,14 @@ class _IdkkWidgetState extends State<Home> {
                                 size: 24,
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const Viewprofile()),
-                                );
+                                Navigator.pushNamed(context, '/viewprofile')
+                                    .then((_) {
+                                  // This block runs when you have returned back from screen 2.
+                                  setState(() {
+                                    // code here to refresh data
+                                    getComplaints();
+                                  });
+                                });
                               },
                             ),
                           ],
@@ -656,8 +668,9 @@ class _IdkkWidgetState extends State<Home> {
                                                       'Unresolved'),
                                                   child: FFButtonWidget(
                                                     onPressed: () {
-                                                      // DELETE THAT SHIT
-                                                      // DeleteComplaint();
+                                                      // DELETE
+                                                      DeleteComplaint(
+                                                          complaint[i]);
                                                     },
                                                     text: 'Delete',
                                                     options: FFButtonOptions(
@@ -710,9 +723,37 @@ class _IdkkWidgetState extends State<Home> {
     );
   }
 
+  void DeleteComplaint(complaint) async {
+    String APIURL = "http://10.0.2.2/index.php/hucp/delete";
+
+    var json_body = {'complaint_id': complaint[0]};
+
+    print(json_body);
+
+    http.Response response =
+        await http.post(Uri.parse(APIURL), body: json_body);
+
+    var data = jsonDecode(response.body);
+
+    var message = data["message"];
+    print(message);
+
+    if (message == "true") {
+      setState(() {
+        getComplaints();
+      });
+    } else {
+      final snackBar = SnackBar(
+          content:
+              const Text('Complaint could not be deleted. Please try again.'));
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   void SendComplaint(complaint) async {
     var sessionManager = SessionManager();
-    await sessionManager.set("id", complaint[0]);
+    await sessionManager.set("complaint_id", complaint[0]);
     await sessionManager.set("title", complaint[1]);
     await sessionManager.set("content", complaint[2]);
     await sessionManager.set("ldate", complaint[3]);
@@ -721,11 +762,16 @@ class _IdkkWidgetState extends State<Home> {
 
     if (complaint[4] == null) {
       await sessionManager.set("rdate", "");
+    } else {
+      await sessionManager.set("rdate", complaint[4]);
     }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const ViewComplaint()),
-    );
+    Navigator.pushNamed(context, '/viewcomplaint').then((_) {
+      // This block runs when you have returned back from screen 2.
+      setState(() {
+        // code here to refresh data
+        getComplaints();
+      });
+    });
   }
 }

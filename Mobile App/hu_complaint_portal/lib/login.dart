@@ -18,6 +18,8 @@ import 'forgot_pass.dart';
 import 'home.dart';
 import 'edit-profile.dart';
 import 'view-complaint.dart';
+import 'main.dart';
+import 'apikey.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -27,20 +29,6 @@ class Login extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<Login> with TickerProviderStateMixin {
-  // final animationsMap = {
-  //   'columnOnPageLoadAnimation': AnimationInfo(
-  //     trigger: AnimationTrigger.onPageLoad,
-  //     effects: [
-  //       FadeEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: 0,
-  //         end: 1,
-  //       ),
-  //     ],
-  //   ),
-  // };
   TextEditingController? textController1;
   TextEditingController? textController2;
 
@@ -53,13 +41,6 @@ class _HomePageWidgetState extends State<Login> with TickerProviderStateMixin {
 
   late bool passwordVisibility;
   final scaffoldKey = GlobalKey<FormState>();
-
-  // var databaseConnection = PostgreSQLConnection(
-  //     databaseHost, 5432, "hu-complaint-portal",
-  //     queryTimeoutInSeconds: 3600,
-  //     timeoutInSeconds: 3600,
-  //     username: username,
-  //     password: password);
 
   @override
   void initState() {
@@ -340,8 +321,8 @@ class _HomePageWidgetState extends State<Login> with TickerProviderStateMixin {
 
     print(json_body);
 
-    http.Response response =
-        await http.post(Uri.parse(APIURL), body: json_body);
+    http.Response response = await http.post(Uri.parse(APIURL),
+        headers: {"Authorization": APIkey.key}, body: json_body);
 
     var data = jsonDecode(response.body);
     var message = data["message"];
@@ -356,10 +337,21 @@ class _HomePageWidgetState extends State<Login> with TickerProviderStateMixin {
       await sessionManager.set("email", textController1!.text);
       await sessionManager.set("password", textController2!.text);
 
-      Navigator.pushReplacement(
-        context,
+      bool? result = await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => const Home()),
       );
+      print(result);
+      if (result == null) {
+        //Show SnackBar
+        final snackBar =
+            SnackBar(content: const Text('Successfully logged out!'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        textController2!.text = '';
+        textController1!.text = '';
+
+        await SessionManager().destroy();
+      }
     } else {
       final snackBar =
           SnackBar(content: const Text('Incorrect email or password'));

@@ -17,6 +17,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'home.dart';
 import 'login.dart';
+import 'main.dart';
 
 class ViewComplaint extends StatefulWidget {
   const ViewComplaint({
@@ -50,7 +51,7 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
   var i;
   var t;
   var c;
-  var ld;
+  var dl;
   var rd;
   var d;
   var s;
@@ -78,7 +79,7 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
   }
 
   GetComplaintDetails() async {
-    dynamic id = await SessionManager().get("id");
+    dynamic complaint_id = await SessionManager().get("complaint_id");
     dynamic title = await SessionManager().get("title");
     dynamic content = await SessionManager().get("content");
     dynamic ldate = await SessionManager().get("ldate");
@@ -112,7 +113,8 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
       c = content.toString();
       d = department.toString();
       s = status.toString();
-      i = id.toString();
+      i = complaint_id.toString();
+      rd = rdate.toString();
 
       print(t);
       print(c);
@@ -139,14 +141,15 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
             size: 30,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const Home()),
-            );
+            Navigator.pop(context);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const Home()),
+            // );
           },
         ),
         title: Text(
-          'Edit Profile',
+          'View Complaint',
           style: FlutterFlowTheme.of(context).title3.override(
                 fontFamily: 'Work Sans',
               ),
@@ -586,49 +589,103 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
                           ],
                         )),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 24),
-                      child: FFButtonWidget(
-                        onPressed: () {
-                          if (scaffoldKey.currentState!.validate()) {
-                            if (textController1!.text == t.toString() &&
-                                textController2!.text == c.toString() &&
-                                dropDownValue == d.toString()) {
-                              final snackBar = SnackBar(
-                                  content: const Text(
-                                      "You haven't changed any information!"));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            } 
-                            else {
-                              UpdateComplaint();
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 24),
+
+
+
+
+
+
+                        child: Column(children: [
+                          Visibility(
+                            visible: (s == "Unresolved"),
+                            child: FFButtonWidget(
+                          onPressed: () {
+                            if (scaffoldKey.currentState!.validate()) {
+                              if (textController1!.text == t.toString() &&
+                                  textController2!.text == c.toString() &&
+                                  dropDownValue == d.toString()) {
+                                final snackBar = SnackBar(
+                                    content: const Text(
+                                        "You haven't changed any information!"));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              } else {
+                                UpdateComplaint();
+                              }
+                            } else {
+                              return;
                             }
-                          } else {
-                            return;
-                          }
-                        },
-                        text: 'Save Changes',
-                        options: FFButtonOptions(
-                          width: 230,
-                          height: 50,
-                          color: Color(0xFF821C8B),
-                          textStyle: FlutterFlowTheme.of(context)
-                              .subtitle2
-                              .override(
-                                fontFamily: 'Work Sans',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color:
-                                    FlutterFlowTheme.of(context).primaryBtnText,
-                              ),
-                          elevation: 3,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
+                          },
+                          text: 'Save Changes',
+                          options: FFButtonOptions(
+                            width: 230,
+                            height: 50,
+                            color: Color(0xFF821C8B),
+                            textStyle:
+                                FlutterFlowTheme.of(context).subtitle2.override(
+                                      fontFamily: 'Work Sans',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                    ),
+                            elevation: 3,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            // borderRadius: BorderRadius.circular(40),
                           ),
-                          // borderRadius: BorderRadius.circular(40),
+                        )
+                         ),
+
+                         Visibility(
+                          visible: (s == "Resolved" && rd.isEmpty),
+                          child: FFButtonWidget(
+                          onPressed: () {
+                            if (scaffoldKey.currentState!.validate()) {
+                              if (textController4!.text.isEmpty) {
+                                final snackBar = SnackBar(
+                                    content: const Text(
+                                        "You haven't add a resolved date!"));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              } else {
+                                Resolve();
+                              }
+                            } else {
+                              return;
+                            }
+                          },
+                          text: 'Resolve',
+                          options: FFButtonOptions(
+                            width: 230,
+                            height: 50,
+                            color: Color(0xFF821C8B),
+                            textStyle:
+                                FlutterFlowTheme.of(context).subtitle2.override(
+                                      fontFamily: 'Work Sans',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                    ),
+                            elevation: 3,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            // borderRadius: BorderRadius.circular(40),
+                          ),
+                        )
+                         )
+                        ],)
+
+
+
+                        
                         ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -637,16 +694,44 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
     );
   }
 
-  Future UpdateComplaint() async {
+  Future Resolve() async {
+    String APIURL = "http://10.0.2.2/index.php/hucp/resolve";
 
+    var json_body = {'complaint_id': i};
+
+    print(json_body);
+
+    http.Response response =
+        await http.post(Uri.parse(APIURL), body: json_body);
+
+    var data = jsonDecode(response.body);
+
+    var message = data["message"];
+    print(message);
+
+    if (message == "true") {
+      var sessionManager = SessionManager();
+      await sessionManager.set("rdate", message);
+
+      Navigator.pop(context);
+    } else {
+      final snackBar = SnackBar(
+          content:
+              const Text('Complaint could not be updated. Please try again.'));
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future UpdateComplaint() async {
     // send complaint id, complaint title, complaint description, complaint status to API
     String APIURL = "http://10.0.2.2/index.php/hucp/updatecomplaint";
 
     var json_body = {
-      'id': i,
-      'title': textController1!.text,
-      'content': textController2!.text,
-      'status': dropDownValue.toString()
+      'complaint_id': i,
+      'complaint_title': textController1!.text,
+      'complaint_content': textController2!.text,
+      'complaint_department': dropDownValue.toString()
     };
 
     print(json_body);
@@ -658,13 +743,11 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
     var message = data["message"];
     print(message);
     if (message == "true") {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
+      Navigator.pop(context);
     } else {
-      final snackBar =
-          SnackBar(content: const Text('Complaint could not be updated. Please try again.'));
+      final snackBar = SnackBar(
+          content:
+              const Text('Complaint could not be updated. Please try again.'));
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

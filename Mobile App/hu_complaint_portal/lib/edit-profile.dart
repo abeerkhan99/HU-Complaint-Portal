@@ -46,6 +46,12 @@ class _EditProfileWidgetState extends State<EditProfile> {
   String? sprogram;
 
   final DropDownList = <String>[];
+  var i;
+  var f;
+  var l;
+  var e;
+  var p;
+  var b;
 
   @override
   void initState() {
@@ -94,12 +100,20 @@ class _EditProfileWidgetState extends State<EditProfile> {
 
     setState(() {
       yourAgeController1!.text = id.toString();
-      yourEmailController!.text = lname.toString();
       yourNameController!.text = fname.toString();
+      yourEmailController!.text = lname.toString();
       yourAilmentsController!.text = email.toString();
 
       dropDownValue = program.toString();
       countControllerValue = batch;
+
+      i = id.toString();
+      f = fname.toString();
+      l = lname.toString();
+      e = email.toString();
+      p = program.toString();
+      b = batch.toString();
+
     });
   }
 
@@ -121,10 +135,7 @@ class _EditProfileWidgetState extends State<EditProfile> {
             size: 30,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const Viewprofile()),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text(
@@ -301,6 +312,7 @@ class _EditProfileWidgetState extends State<EditProfile> {
                           () => setState(() {}),
                         ),
                         obscureText: false,
+                        readOnly: true,
                         decoration: InputDecoration(
                           labelText: 'StudentID',
                           labelStyle: FlutterFlowTheme.of(context).bodyText2,
@@ -338,19 +350,6 @@ class _EditProfileWidgetState extends State<EditProfile> {
                               FlutterFlowTheme.of(context).primaryBackground,
                           contentPadding:
                               EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                          suffixIcon: yourAgeController1!.text.isNotEmpty
-                              ? InkWell(
-                                  onTap: () async {
-                                    yourAgeController1?.clear();
-                                    setState(() {});
-                                  },
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Color(0xFF757575),
-                                    size: 15,
-                                  ),
-                                )
-                              : null,
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Work Sans',
@@ -358,6 +357,12 @@ class _EditProfileWidgetState extends State<EditProfile> {
                         inputFormatters: [
                           MaskTextInputFormatter(mask: 'AA#####')
                         ],
+                        validator: (value) {
+                          // check if field is empty
+                          if (value!.isEmpty) {
+                            return "Please enter a student ID";
+                          }
+                        },
                       ),
                     ),
                     Padding(
@@ -514,7 +519,7 @@ class _EditProfileWidgetState extends State<EditProfile> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                       child: FlutterFlowDropDown(
-                        initialOption: dropDownValue,
+                        initialOption: dropDownValue.toString(),
                         options: DropDownList, //GET VALUES FROM API
                         onChanged: (val) => setState(() => dropDownValue = val),
                         width: 320,
@@ -524,7 +529,7 @@ class _EditProfileWidgetState extends State<EditProfile> {
                                   fontFamily: 'Work Sans',
                                   color: Colors.black,
                                 ),
-                        hintText: 'Select Program',
+                        hintText: dropDownValue.toString(),
                         fillColor: Color(0xFFF1F4F8),
                         elevation: 2,
                         borderColor: Colors.transparent,
@@ -677,14 +682,29 @@ class _EditProfileWidgetState extends State<EditProfile> {
                           if (scaffoldKey.currentState!.validate()) {
                             // if fields are not empty
                             // send data to api to get checked
-                            if (yourAgeController2!.text !=
+
+                            if (f == yourNameController!.text && l == yourEmailController!.text && e == yourAilmentsController!.text && p == dropDownValue && b == countControllerValue.toString())
+                            {
+
+                              final snackBar = SnackBar(
+                                  content:
+                                      const Text("You haven't changed any information!"));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+
+                            }
+
+                            else if (yourAgeController2!.text !=
                                 yourAgeController3!.text) {
+                              print("Matching details");
                               final snackBar = SnackBar(
                                   content:
                                       const Text('Passwords do not match'));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
-                            } else {
+                            } 
+                            else {
+                              print("Sending data");
                               SendNewData();
                             }
                           } else {
@@ -727,28 +747,39 @@ class _EditProfileWidgetState extends State<EditProfile> {
 
     var json_body = {
       'id': yourAgeController1!.text,
-      'fname': yourEmailController!.text,
-      'lname': yourNameController!.text,
+      'fname': yourNameController!.text,
+      'lname': yourEmailController!.text,
       'email': yourAilmentsController!.text,
-      'program': dropDownValue,
-      'batch': countControllerValue,
+      'program': dropDownValue.toString(),
+      'batch': countControllerValue.toString(),
       'password': yourAgeController2!.text
     };
 
     print(json_body);
 
-    http.Response response = await http.post(Uri.parse(APIURL), body: json_body);
+    http.Response response =
+        await http.post(Uri.parse(APIURL), body: json_body);
 
     var data = jsonDecode(response.body);
     var message = data["message"];
     print(message);
     if (message == "true") {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
-    } 
-    else {
+      var sessionManager = SessionManager();
+
+      await sessionManager.set("id", yourAgeController1!.text);
+      await sessionManager.set("fname", yourNameController!.text);
+      await sessionManager.set("lname", yourEmailController!.text);
+      await sessionManager.set("program", dropDownValue.toString());
+      await sessionManager.set("batch", countControllerValue.toString());
+      await sessionManager.set("email", yourAilmentsController!.text);
+
+      if (yourAgeController2!.text.isNotEmpty) {
+        await sessionManager.set("password", yourAgeController2!.text);
+      }
+      Navigator.of(context)
+        ..pop()
+        ..pop();
+    } else {
       final snackBar = SnackBar(
           content:
               const Text('Could not update profile. Please try again later.'));

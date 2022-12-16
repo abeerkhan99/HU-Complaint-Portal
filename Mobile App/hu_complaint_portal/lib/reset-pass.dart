@@ -313,11 +313,12 @@ class _HomePageWidgetState extends State<ResetPassword>
     print(message);
     if (message == "true") {
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Login()),
-      );
-      
+      Navigator.of(context)..pop()..pop();
+      final snackBar =
+          SnackBar(content: const Text('Password changed! Please login.'));
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       // set snackbar to appear on login page
 
     } else {

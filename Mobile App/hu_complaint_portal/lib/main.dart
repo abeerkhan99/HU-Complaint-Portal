@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hu_complaint_portal/create-post.dart';
 import 'login.dart';
+import 'home.dart';
+import 'view-complaint.dart';
+import 'view-profile.dart';
+import 'edit-profile.dart';
+import 'forgot_pass.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +20,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const Login(),
+      // home: const Login(),
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => const Login(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/home': (context) => const Home(),
+        '/viewcomplaint': (context) => const ViewComplaint(),
+        '/createpost': (context) => const CreatePost(),
+        '/viewprofile': (context) => Viewprofile(),
+        '/editprofile': (context) => EditProfile(),
+        '/forgotpass': (context) => ForgotPass()
+      },
     );
   }
 }
@@ -32,6 +50,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -103,3 +122,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
