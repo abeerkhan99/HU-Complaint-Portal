@@ -14,6 +14,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'login.dart';
+import 'apikey.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class _IdkkCopyWidgetState extends State<CreatePost> {
     dynamic id = await SessionManager().get("id");
 
     String APIURL = "http://10.0.2.2/index.php/hucp/getdepartment";
-    http.Response response = await http.get(Uri.parse(APIURL));
+    http.Response response = await http.get(Uri.parse(APIURL), headers: {"Authorization": APIkey.key});
 
     var data = jsonDecode(response.body);
     var message = data["message"];
@@ -90,15 +91,13 @@ class _IdkkCopyWidgetState extends State<CreatePost> {
             size: 30,
           ),
           onPressed: () {
-
             Navigator.pushNamed(context, '/home').then((_) {
               // This block runs when you have returned back from screen 2.
               setState(() {
                 // code here to refresh data
                 GetDepartment();
               });
-    });
-
+            });
           },
         ),
         title: Text(
@@ -190,7 +189,6 @@ class _IdkkCopyWidgetState extends State<CreatePost> {
                                             height: 340,
                                             decoration: BoxDecoration(
                                               color: Colors.white,
-                                            
                                               boxShadow: [
                                                 BoxShadow(
                                                   blurRadius: 6,
@@ -348,8 +346,6 @@ class _IdkkCopyWidgetState extends State<CreatePost> {
                                                         EdgeInsetsDirectional
                                                             .fromSTEB(
                                                                 16, 16, 16, 0),
-
-
                                                     child: TextFormField(
                                                       controller:
                                                           userNameController,
@@ -460,9 +456,6 @@ class _IdkkCopyWidgetState extends State<CreatePost> {
                                                         }
                                                       },
                                                     ),
-
-
-
                                                   ),
                                                   Padding(
                                                     padding:
@@ -714,18 +707,17 @@ class _IdkkCopyWidgetState extends State<CreatePost> {
     print(json_body);
 
     http.Response response =
-        await http.post(Uri.parse(APIURL), body: json_body);
+        await http.post(Uri.parse(APIURL), headers: {"Authorization": APIkey.key}, body: json_body);
 
     var data = jsonDecode(response.body);
     var message = data["message"];
     print(message);
 
     if (message == "true") {
-      
       Navigator.pop(context);
-    } 
-    else {
-      final snackBar = SnackBar(content: const Text('Could not add complaint. Please try again'));
+    } else {
+      final snackBar = SnackBar(
+          content: const Text('Could not add complaint. Please try again'));
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

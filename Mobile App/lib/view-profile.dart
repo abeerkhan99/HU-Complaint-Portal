@@ -1,4 +1,3 @@
-
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import '../src/flutter_flow/flutter_flow_icon_button.dart';
@@ -11,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'login.dart';
 import 'edit-profile.dart';
 import 'home.dart';
+import 'main.dart';
 
 class Viewprofile extends StatefulWidget {
   const Viewprofile({Key? key}) : super(key: key);
@@ -83,8 +83,7 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
             size: 30,
           ),
           onPressed: () {
-              Navigator.pop(context);
-
+            Navigator.pop(context);
           },
         ),
         title: Text(
@@ -428,16 +427,15 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
                                   size: 18,
                                 ),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/editprofile').then((_) {
-                                      // This block runs when you have returned back from screen 2.
-                                      setState(() {
-                                        // code here to refresh data
-                                        getSessionValues();
-                                      });
+                                  Navigator.pushNamed(context, '/editprofile')
+                                      .then((_) {
+                                    // This block runs when you have returned back from screen 2.
+                                    setState(() {
+                                      // code here to refresh data
+                                      getSessionValues();
+                                    });
                                   });
-
-                                  
-                                  },
+                                },
                               )),
                         ),
                       ],
@@ -453,9 +451,12 @@ class _ViewprofileWidgetState extends State<Viewprofile> {
                   children: [
                     FFButtonWidget(
                       onPressed: () async {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Login()),);
+                        
                         await SessionManager().destroy();
-
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const Login()),
+                        );
                       },
                       text: 'Log Out',
                       options: FFButtonOptions(

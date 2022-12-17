@@ -13,6 +13,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'login.dart';
+import 'apikey.dart';
 
 class ForgotPass extends StatefulWidget {
   const ForgotPass({Key? key}) : super(key: key);
@@ -100,151 +101,150 @@ class _HomePageWidgetState extends State<ForgotPass>
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                             child: TextFormField(
-                                controller: emailTextController,
-                                onChanged: (_) => EasyDebounce.debounce(
-                                      'emailTextController',
-                                      Duration(milliseconds: 2000),
-                                      () => setState(() {}),
-                                    ),
-                                autofocus: true,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'StudentID',
-                                  hintStyle:
-                                      FlutterFlowTheme.of(context).bodyText2,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
+                              controller: emailTextController,
+                              onChanged: (_) => EasyDebounce.debounce(
+                                'emailTextController',
+                                Duration(milliseconds: 2000),
+                                () => setState(() {}),
+                              ),
+                              autofocus: true,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelText: 'StudentID',
+                                hintStyle:
+                                    FlutterFlowTheme.of(context).bodyText2,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    width: 2,
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color(0xFFF50D36),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color(0xFFF50D36),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  suffixIcon:
-                                      emailTextController!.text.isNotEmpty
-                                          ? InkWell(
-                                              onTap: () async {
-                                                emailTextController?.clear();
-                                                setState(() {});
-                                              },
-                                              child: Icon(
-                                                Icons.clear,
-                                                color: Color(0xFF757575),
-                                                size: 15,
-                                              ),
-                                            )
-                                          : null,
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                                inputFormatters: [
-                                  MaskTextInputFormatter(mask: 'AA#####')
-                                ],
-                                validator: (value) {
-                                  // check if field is empty
-                                  if (value!.isEmpty) {
-                                    return "Please enter a student ID";
-                                  }
-                                },
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFF50D36),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFF50D36),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                suffixIcon: emailTextController!.text.isNotEmpty
+                                    ? InkWell(
+                                        onTap: () async {
+                                          emailTextController?.clear();
+                                          setState(() {});
+                                        },
+                                        child: Icon(
+                                          Icons.clear,
+                                          color: Color(0xFF757575),
+                                          size: 15,
+                                        ),
+                                      )
+                                    : null,
+                              ),
+                              style: FlutterFlowTheme.of(context).bodyText1,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: 'AA#####')
+                              ],
+                              validator: (value) {
+                                // check if field is empty
+                                if (value!.isEmpty) {
+                                  return "Please enter a student ID";
+                                }
+                              },
+                            ),
                           ),
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                             child: TextFormField(
-                                controller: passwordTextController,
-                                onChanged: (_) => EasyDebounce.debounce(
-                                      'passwordTextController',
-                                      Duration(milliseconds: 2000),
-                                      () => setState(() {}),
-                                    ),
-                                autofocus: true,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Email',
-                                  hintStyle:
-                                      FlutterFlowTheme.of(context).bodyText2,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
+                              controller: passwordTextController,
+                              onChanged: (_) => EasyDebounce.debounce(
+                                'passwordTextController',
+                                Duration(milliseconds: 2000),
+                                () => setState(() {}),
+                              ),
+                              autofocus: true,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelText: 'Email',
+                                hintStyle:
+                                    FlutterFlowTheme.of(context).bodyText2,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    width: 2,
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color(0xFFF50D36),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color(0xFFF50D36),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  suffixIcon:
-                                      passwordTextController!.text.isNotEmpty
-                                          ? InkWell(
-                                              onTap: () async {
-                                                passwordTextController?.clear();
-                                                setState(() {});
-                                              },
-                                              child: Icon(
-                                                Icons.clear,
-                                                color: Color(0xFF757575),
-                                                size: 15,
-                                              ),
-                                            )
-                                          : null,
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  // check if field is empty
-                                  if (value!.isEmpty) {
-                                    return "Please enter an email address";
-                                  }
-                                  // check if email format is correct
-                                  else if (!RegExp(
-                                          "^[a-zA-Z0-9+_.-]+@st.habib.edu.pk")
-                                      .hasMatch(value)) {
-                                    return "Incorrect email format";
-                                  }
-                                },
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFF50D36),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFF50D36),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                suffixIcon:
+                                    passwordTextController!.text.isNotEmpty
+                                        ? InkWell(
+                                            onTap: () async {
+                                              passwordTextController?.clear();
+                                              setState(() {});
+                                            },
+                                            child: Icon(
+                                              Icons.clear,
+                                              color: Color(0xFF757575),
+                                              size: 15,
+                                            ),
+                                          )
+                                        : null,
+                              ),
+                              style: FlutterFlowTheme.of(context).bodyText1,
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                // check if field is empty
+                                if (value!.isEmpty) {
+                                  return "Please enter an email address";
+                                }
+                                // check if email format is correct
+                                else if (!RegExp(
+                                        "^[a-zA-Z0-9+_.-]+@st.habib.edu.pk")
+                                    .hasMatch(value)) {
+                                  return "Incorrect email format";
+                                }
+                              },
+                            ),
                           ),
                           Padding(
                               padding:
@@ -271,7 +271,6 @@ class _HomePageWidgetState extends State<ForgotPass>
                                 // if fields are not empty
                                 // send data to api to get checked
                                 VerifyData();
-                                
                               } else {
                                 return;
                               }
@@ -305,8 +304,7 @@ class _HomePageWidgetState extends State<ForgotPass>
     );
   }
 
-  Future VerifyData() async{
-    
+  Future VerifyData() async {
     String APIURL = "http://10.0.2.2/index.php/hucp/verify";
 
     var json_body = {
@@ -316,13 +314,13 @@ class _HomePageWidgetState extends State<ForgotPass>
 
     print(json_body);
 
-    http.Response response = await http.post(Uri.parse(APIURL), body: json_body);
+    http.Response response =
+        await http.post(Uri.parse(APIURL), headers: {"Authorization": APIkey.key}, body: json_body);
 
     var data = jsonDecode(response.body);
     var message = data["message"];
     print(message);
     if (message == "true") {
-
       var sessionManager = SessionManager();
       await sessionManager.set("sid", emailTextController!.text);
       await sessionManager.set("semail", passwordTextController!.text);
@@ -331,14 +329,10 @@ class _HomePageWidgetState extends State<ForgotPass>
         context,
         MaterialPageRoute(builder: (context) => const ForgotPass()),
       );
-      
-
     } else {
-      final snackBar =
-          SnackBar(content: const Text('ID and Email not match'));
+      final snackBar = SnackBar(content: const Text('ID and Email not match'));
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
-
 }

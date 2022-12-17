@@ -17,6 +17,8 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'home.dart';
 import 'login.dart';
+import 'main.dart';
+import 'apikey.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({
@@ -87,7 +89,8 @@ class _EditProfileWidgetState extends State<EditProfile> {
     dynamic batch = await SessionManager().get("batch");
 
     String APIURL = "http://10.0.2.2/index.php/hucp/getprogram";
-    http.Response response = await http.get(Uri.parse(APIURL));
+    http.Response response = await http
+        .get(Uri.parse(APIURL), headers: {"Authorization": APIkey.key});
 
     var data = jsonDecode(response.body);
     var message = data["message"]; //["CS"],["EE"],["SDP"],["CND"]]
@@ -755,7 +758,7 @@ class _EditProfileWidgetState extends State<EditProfile> {
     print(json_body);
 
     http.Response response =
-        await http.post(Uri.parse(APIURL), body: json_body);
+        await http.post(Uri.parse(APIURL), headers: {"Authorization": APIkey.key}, body: json_body);
 
     var data = jsonDecode(response.body);
     var message = data["message"];

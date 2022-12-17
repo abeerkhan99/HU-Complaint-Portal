@@ -18,6 +18,7 @@ import 'package:http/http.dart' as http;
 import 'home.dart';
 import 'login.dart';
 import 'main.dart';
+import 'apikey.dart';
 
 class ViewComplaint extends StatefulWidget {
   const ViewComplaint({
@@ -88,7 +89,7 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
     dynamic status = await SessionManager().get("status");
 
     String APIURL = "http://10.0.2.2/index.php/hucp/getdepartment";
-    http.Response response = await http.get(Uri.parse(APIURL));
+    http.Response response = await http.get(Uri.parse(APIURL), headers: {"Authorization": APIkey.key});
 
     var data = jsonDecode(response.body);
     var message = data["message"];
@@ -590,102 +591,94 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
                         )),
                     Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 24),
-
-
-
-
-
-
-                        child: Column(children: [
-                          Visibility(
-                            visible: (s == "Unresolved"),
-                            child: FFButtonWidget(
-                          onPressed: () {
-                            if (scaffoldKey.currentState!.validate()) {
-                              if (textController1!.text == t.toString() &&
-                                  textController2!.text == c.toString() &&
-                                  dropDownValue == d.toString()) {
-                                final snackBar = SnackBar(
-                                    content: const Text(
-                                        "You haven't changed any information!"));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else {
-                                UpdateComplaint();
-                              }
-                            } else {
-                              return;
-                            }
-                          },
-                          text: 'Save Changes',
-                          options: FFButtonOptions(
-                            width: 230,
-                            height: 50,
-                            color: Color(0xFF821C8B),
-                            textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Work Sans',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBtnText,
+                        child: Column(
+                          children: [
+                            Visibility(
+                                visible: (s == "Unresolved"),
+                                child: FFButtonWidget(
+                                  onPressed: () {
+                                    if (scaffoldKey.currentState!.validate()) {
+                                      if (textController1!.text ==
+                                              t.toString() &&
+                                          textController2!.text ==
+                                              c.toString() &&
+                                          dropDownValue == d.toString()) {
+                                        final snackBar = SnackBar(
+                                            content: const Text(
+                                                "You haven't changed any information!"));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
+                                        UpdateComplaint();
+                                      }
+                                    } else {
+                                      return;
+                                    }
+                                  },
+                                  text: 'Save Changes',
+                                  options: FFButtonOptions(
+                                    width: 230,
+                                    height: 50,
+                                    color: Color(0xFF821C8B),
+                                    textStyle: FlutterFlowTheme.of(context)
+                                        .subtitle2
+                                        .override(
+                                          fontFamily: 'Work Sans',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBtnText,
+                                        ),
+                                    elevation: 3,
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1,
                                     ),
-                            elevation: 3,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            // borderRadius: BorderRadius.circular(40),
-                          ),
-                        )
-                         ),
-
-                         Visibility(
-                          visible: (s == "Resolved" && rd.isEmpty),
-                          child: FFButtonWidget(
-                          onPressed: () {
-                            if (scaffoldKey.currentState!.validate()) {
-                              if (textController4!.text.isEmpty) {
-                                final snackBar = SnackBar(
-                                    content: const Text(
-                                        "You haven't add a resolved date!"));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else {
-                                Resolve();
-                              }
-                            } else {
-                              return;
-                            }
-                          },
-                          text: 'Resolve',
-                          options: FFButtonOptions(
-                            width: 230,
-                            height: 50,
-                            color: Color(0xFF821C8B),
-                            textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Work Sans',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBtnText,
+                                    // borderRadius: BorderRadius.circular(40),
+                                  ),
+                                )),
+                            Visibility(
+                                visible: (s == "Resolved" && rd.isEmpty),
+                                child: FFButtonWidget(
+                                  onPressed: () {
+                                    if (scaffoldKey.currentState!.validate()) {
+                                      if (textController4!.text.isEmpty) {
+                                        final snackBar = SnackBar(
+                                            content: const Text(
+                                                "You haven't add a resolved date!"));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
+                                        Resolve();
+                                      }
+                                    } else {
+                                      return;
+                                    }
+                                  },
+                                  text: 'Resolve',
+                                  options: FFButtonOptions(
+                                    width: 230,
+                                    height: 50,
+                                    color: Color(0xFF821C8B),
+                                    textStyle: FlutterFlowTheme.of(context)
+                                        .subtitle2
+                                        .override(
+                                          fontFamily: 'Work Sans',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBtnText,
+                                        ),
+                                    elevation: 3,
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1,
                                     ),
-                            elevation: 3,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            // borderRadius: BorderRadius.circular(40),
-                          ),
-                        )
-                         )
-                        ],)
-
-
-
-                        
-                        ),
+                                    // borderRadius: BorderRadius.circular(40),
+                                  ),
+                                ))
+                          ],
+                        )),
                   ],
                 ),
               ),
@@ -702,7 +695,7 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
     print(json_body);
 
     http.Response response =
-        await http.post(Uri.parse(APIURL), body: json_body);
+        await http.post(Uri.parse(APIURL), headers: {"Authorization": APIkey.key}, body: json_body);
 
     var data = jsonDecode(response.body);
 
@@ -737,7 +730,7 @@ class _EditProfileWidgetState extends State<ViewComplaint> {
     print(json_body);
 
     http.Response response =
-        await http.post(Uri.parse(APIURL), body: json_body);
+        await http.post(Uri.parse(APIURL), headers: {"Authorization": APIkey.key}, body: json_body);
 
     var data = jsonDecode(response.body);
     var message = data["message"];

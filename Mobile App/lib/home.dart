@@ -16,6 +16,7 @@ import 'login.dart';
 import 'view-profile.dart';
 import 'view-complaint.dart';
 import 'main.dart';
+import 'apikey.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -40,12 +41,12 @@ class _IdkkWidgetState extends State<Home> {
     dynamic email = await SessionManager().get("email");
     dynamic password = await SessionManager().get("password");
 
-    if (email == null && password == null)
-    {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()),);
-    }
-    else
-    {
+    if (email == null && password == null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Login()),
+      );
+    } else {
       dynamic id = await SessionManager().get("id");
 
       String APIURL = "http://10.0.2.2/index.php/hucp/getcomplaint";
@@ -55,7 +56,7 @@ class _IdkkWidgetState extends State<Home> {
       print(json_body);
 
       http.Response response =
-          await http.post(Uri.parse(APIURL), body: json_body);
+          await http.post(Uri.parse(APIURL), headers: {"Authorization": APIkey.key}, body: json_body);
 
       var data = jsonDecode(response.body);
 
@@ -70,11 +71,7 @@ class _IdkkWidgetState extends State<Home> {
       });
 
       print(boxes);
-
     }
-
-
-    
   }
 
   @override
@@ -744,8 +741,8 @@ class _IdkkWidgetState extends State<Home> {
 
     print(json_body);
 
-    http.Response response =
-        await http.post(Uri.parse(APIURL), body: json_body);
+    http.Response response = await http.post(Uri.parse(APIURL),
+        headers: {"Authorization": APIkey.key}, body: json_body);
 
     var data = jsonDecode(response.body);
 
