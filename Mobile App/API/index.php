@@ -17,16 +17,21 @@
     if ((isset($uri[2]) && $uri[2] != 'hucp') || !isset($uri[3])) {
         
         // header("HTTP/1.1 404 Not Found");
-        exit();
-        
+        exit();  
     }
+    
+    $headers = getallheaders();
+    if($headers["authorization"] == $key)
+    {
+        $controller = new HUCPController($uri[3]);
+        $controller->processRequest();
+    }
+
 
     // echo $uri[2];
     // echo $uri[3];
 
-    // $requestMethod = $_SERVER["REQUEST_METHOD"];
-    $controller = new HUCPController($uri[3]);
-    $controller->processRequest();
+    
 
 
     
